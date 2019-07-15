@@ -29,10 +29,15 @@ public class ButtonLegendDialog extends JDialog {
     this.setLocation();
     this.setResizable(true);
     
-    ImageIcon[] icons = {Icons.alarm};
-    String[] description = {"blah"};
+    ImageIcon[] icons = {Icons.pin, Icons.settings,Icons.left,
+        Icons.right, Icons.xminus, Icons.xplus, Icons.yminus,
+        Icons.yplus};
+    String[] description = {"Helicorder always on top",
+        "Helicorder view settings", "Scroll back time",
+        "Scroll forward time", "Compress X-axis", "Expand X-axis",
+        "Compress Y-axis", "Expand Y-axis"};
     
-    JPanel panel = new JPanel(new GridLayout(icons.length, 2));
+    JPanel panel = new JPanel(new GridLayout(icons.length/2, 4));
     
     for (int x = 0; x < icons.length && x < description.length; x++) {
       JLabel l = new JLabel(icons[x]);
