@@ -196,7 +196,7 @@ public class HelicorderViewerSettingsDialog extends SwarmModalDialog {
     zoomList = new JComboBox<String>(zooms);
     JLabel zoomLabel = new JLabel("Zoom, seconds:");
     zoomLabel.setLabelFor(zoomList);
-    JButton waveSettingsButton = new JButton("Wave Settings", Icons.wavesettings);
+    JButton waveSettingsButton = new JButton("Wave Settings", Icons.gear);
     waveSettingsButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         WaveViewSettingsDialog wvsd = WaveViewSettingsDialog.getInstance(waveSettings);

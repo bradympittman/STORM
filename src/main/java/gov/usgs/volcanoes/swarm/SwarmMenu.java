@@ -84,6 +84,11 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
   private JMenuItem about;
 
   private AboutDialog aboutDialog;
+  
+  //added
+  private JMenuItem buttonLegend;
+  private ButtonLegendDialog buttonLegendDialog;
+  //end added
 
   private Map<JInternalFrame, InternalFrameMenuItem> windows;
   private Map<SwarmLayout, JMenuItem> layouts;
@@ -469,8 +474,24 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
         aboutDialog.setVisible(true);
       }
     });
+    
+    //added
+    buttonLegend = new JMenuItem("Button Legend...");
+    buttonLegend.setMnemonic('B');
+    buttonLegendDialog = new ButtonLegendDialog();
+    buttonLegend.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        buttonLegendDialog.setVisible(true);
+      }
+    });
+    //end added
+    
+    
 
     helpMenu.add(about);
+    //added
+    helpMenu.add(buttonLegend);
+    //end added
     add(helpMenu);
   }
 

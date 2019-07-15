@@ -25,7 +25,7 @@ public class SwarmFrame extends JInternalFrame {
   protected static SwarmConfig swarmConfig;
   protected static final JFrame applicationFrame = Swarm.getApplicationFrame();
 
-
+ 
   /**
    * Swarm Frame.
    * @param title frame title

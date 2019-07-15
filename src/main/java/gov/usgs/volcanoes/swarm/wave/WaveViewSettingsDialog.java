@@ -10,6 +10,8 @@ import gov.usgs.volcanoes.swarm.SwarmModalDialog;
 import gov.usgs.volcanoes.swarm.wave.WaveViewSettings.ViewType;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -598,4 +600,5 @@ public class WaveViewSettingsDialog extends SwarmModalDialog {
           JOptionPane.ERROR_MESSAGE);
     }
   }
+  
 }

@@ -300,7 +300,7 @@ public class MultiMonitor extends SwarmFrame implements Kioskable {
 
     toolbar.addSeparator();
 
-    settingsButton = SwarmUtil.createToolBarButton(Icons.wavesettings, "Settings for selected wave",
+    settingsButton = SwarmUtil.createToolBarButton(Icons.gear, "Settings for selected wave",
         new ActionListener() {
           public void actionPerformed(final ActionEvent e) {
             requestFocus();

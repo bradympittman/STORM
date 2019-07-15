@@ -48,7 +48,7 @@ public class WaveViewSettings {
 
   public WaveViewPanel view;
   public WaveViewSettingsToolbar toolbar;
-  public ViewType viewType;
+  public static ViewType viewType;
   
   // wave settings
   public boolean autoScaleAmp;
@@ -76,6 +76,8 @@ public class WaveViewSettings {
   public double spectrogramMaxPower;
   public double spectrogramMinFreq;
   public double spectrogramMaxFreq;
+  public double lastSpectrogramMinFreq;
+  public double lastSpectrogramMaxFreq;
   public double spectrogramOverlap;
   public double binSize;
   public int nfft;
@@ -123,6 +125,8 @@ public class WaveViewSettings {
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramOverlap = 0.859375;
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMinFreq = 0;
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxFreq = 25;
+    DEFAULT_WAVE_VIEW_SETTINGS.lastSpectrogramMinFreq = 0;
+    DEFAULT_WAVE_VIEW_SETTINGS.lastSpectrogramMaxFreq = 25;
     DEFAULT_WAVE_VIEW_SETTINGS.binSize = 2;
     DEFAULT_WAVE_VIEW_SETTINGS.nfft = 0; // Zero means automatic
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramLogPower = true;
@@ -199,6 +203,10 @@ public class WaveViewSettings {
     spectrogramMaxPower = s.spectrogramMaxPower;
     spectrogramMinFreq = s.spectrogramMinFreq;
     spectrogramMaxFreq = s.spectrogramMaxFreq;
+    //added
+    lastSpectrogramMinFreq = s.spectrogramMinFreq;
+    lastSpectrogramMaxFreq = s.spectrogramMaxFreq;
+    //end added
     binSize = s.binSize;
     nfft = s.nfft;
     spectrogramOverlap = s.spectrogramOverlap;
@@ -272,6 +280,14 @@ public class WaveViewSettings {
     spectrogramMaxFreq =
         StringUtils.stringToDouble(cf.getString("spectrogramMaxFreq"),
             DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxFreq);
+    //added
+    lastSpectrogramMinFreq =
+        StringUtils.stringToDouble(cf.getString("spectrogramMinFreq"),
+            DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMinFreq);
+    lastSpectrogramMaxFreq =
+        StringUtils.stringToDouble(cf.getString("spectrogramMaxFreq"),
+            DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxFreq);
+    //end added
     autoScaleSpectrogramPower = StringUtils.stringToBoolean(cf.getString("autoScaleSpectrogramPower"),
         DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectrogramPower);
     autoScaleSpectrogramPowerMemory =

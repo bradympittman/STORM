@@ -14,9 +14,11 @@ import gov.usgs.volcanoes.core.time.J2kSec;
 import gov.usgs.volcanoes.swarm.Icons;
 import gov.usgs.volcanoes.swarm.Metadata;
 import gov.usgs.volcanoes.swarm.SwarmConfig;
+import gov.usgs.volcanoes.swarm.SwarmFrame;
 import gov.usgs.volcanoes.swarm.SwingWorker;
 import gov.usgs.volcanoes.swarm.event.TagData;
 import gov.usgs.volcanoes.swarm.event.TagMenu;
+import gov.usgs.volcanoes.swarm.internalFrame.SwarmInternalFrames;
 import gov.usgs.volcanoes.swarm.options.SwarmOptions;
 import gov.usgs.volcanoes.swarm.options.SwarmOptionsListener;
 import gov.usgs.volcanoes.swarm.time.UiTime;
@@ -28,6 +30,7 @@ import gov.usgs.volcanoes.swarm.wave.WaveViewPanelAdapter;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,6 +38,8 @@ import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -47,10 +52,12 @@ import java.awt.image.BufferedImage;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
@@ -117,6 +124,8 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   private TagMenu tagMenu;
   protected ArrayList<TagData> tagData = new ArrayList<TagData>();
   
+  public static String savedStatus;
+  
   /**
    * Constructor.
    * @param hvf helicorder viewer frame
@@ -124,6 +133,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   public HelicorderViewPanel(HelicorderViewerFrame hvf) {
     swarmConfig = SwarmConfig.getInstance();
 
+    savedStatus = "";
     parent = hvf;
     plot = new Plot();
     plot.setBackgroundColor(BACKGROUND_COLOR);
@@ -139,10 +149,14 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     this.addMouseListener(new HelicorderMouseListener());
     this.addMouseMotionListener(new HelicorderMouseMotionListener());
     this.addMouseWheelListener(new HelicorderMouseWheelListener());
+    //added
+    this.addKeyListener(new HelicorderButtonListener());
+    //added
 
     cursorChanged();
 
     SwarmOptions.addOptionsListener(this);
+    
   }
 
   public void addListener(HelicorderViewPanelListener listener) {
@@ -262,6 +276,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
 
         if (SwingUtilities.isLeftMouseButton(e)) {
           createWaveInset(j2k, mx, my);
+
         }
       }
     }
@@ -325,6 +340,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   }
 
   class HelicorderMouseListener implements MouseListener {
+    
     public void mouseClicked(MouseEvent e) {
       UiTime.touchTime();
       HelicorderViewPanel.this.requestFocus();
@@ -368,6 +384,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     public void mouseReleased(MouseEvent e) {}
   }
 
+  
   public boolean hasInset() {
     return insetWavePanel != null;
   }
@@ -394,6 +411,10 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       WaveClipboardFrame cb = WaveClipboardFrame.getInstance();
       cb.setVisible(true);
       cb.addWave(p);
+      
+      //added
+      cb.addKeyListener(new HelicorderButtonListener());
+      //end added
       requestFocus();
     }
   }
@@ -424,6 +445,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
         String status =
             StatusTextArea.getTimeString(j2k, swarmConfig.getTimeZone(settings.channel));
         
+        
         // look for event to show
         if (parent.isTagEnabled()) {
           double mindiff = Double.MAX_VALUE;
@@ -441,11 +463,13 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
             status += "\n" + showTag.getTimeString() + " - " + showTag.classification;
           }
         }
-        
+        savedStatus = status;
         parent.setStatus(status);
+        
       } else {
         parent.setStatus(" ");
       }
+      
     }
   }
 
@@ -516,6 +540,8 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     if (working) {
       return;
     }
+    
+    
 
     insetY = my;
 
@@ -530,7 +556,9 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           if (swarmConfig.durationEnabled && SwingUtilities.isLeftMouseButton(e)) {
             markTime(j2k);   
           }
+          
           insetWavePanel.processMousePosition(e.getX(), e.getY());
+          
         }
       });
     }
@@ -567,7 +595,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     repaint();
   }
 
-  private void loadInsetWave(final double st, final double et) {
+  void loadInsetWave(final double st, final double et) {
     fireInsetCreated(st, et);
     final SwingWorker worker = new SwingWorker() {
       private Wave sw;
@@ -1046,5 +1074,124 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   public HelicorderViewerFrame getFrame() {
     return parent;
   }
+  
+  //Start my code
+  class HelicorderButtonListener implements KeyListener {
+
+    public void keyTyped(KeyEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void keyPressed(KeyEvent e) {
+      if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        System.out.println(savedStatus);
+        showSavedStausBox(savedStatus);
+        
+      }
+      
+    }
+
+    public void keyReleased(KeyEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+    
+  }
+  
+  class SavedStatusMouseListener implements MouseListener {
+    
+    private ArrayList<Color> colors = new ArrayList<Color>();
+    
+    public SavedStatusMouseListener() {
+      Color[] c = {Color.white, Color.yellow, Color.green, Color.pink, 
+          Color.orange, new Color(0,255,255), new Color(219,112,147)};
+      colors = new ArrayList<Color>(Arrays.asList(c));
+    }
+
+    public void mouseClicked(MouseEvent e) {
+   
+      if (e.getSource() instanceof JTextField) {
+        JTextField text = (JTextField)e.getSource();
+        if (SwingUtilities.isLeftMouseButton(e)) {
+          if (text.getBackground().equals(Color.white)) {
+            text.setBackground(Color.yellow);
+          } else {
+            text.setBackground(Color.white);
+          }
+
+        } else if(SwingUtilities.isRightMouseButton(e)) {
+
+          int index = colors.indexOf(text.getBackground()) + 1;
+          
+          if (index >= colors.size()) {
+            index = 0;
+          }
+          text.setBackground(colors.get(index));
+          
+          
+        }
+        
+
+      }
+      
+    }
+
+    public void mousePressed(MouseEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void mouseReleased(MouseEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void mouseEntered(MouseEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void mouseExited(MouseEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+    
+  }
+  
+  public void showSavedStausBox(String status) {
+    SwarmFrame f = new SwarmFrame("Saved Status", true, true, false, true);
+    f.setOpaque(true);
+    f.getContentPane().setLayout(new FlowLayout());
+    for (String str: formatStatus(status)) {
+      JTextField text = new JTextField(str + ",\n");
+      text.addMouseListener(new SavedStatusMouseListener());
+      f.getContentPane().add(text);
+      
+    }
+    
+    
+    f.setVisible(true);
+    f.setSize(500, 300);
+    f.setOpaque(true);
+    f.setBackground(Color.white);
+    SwarmInternalFrames.add(f);
+  }
+  
+  private String[] formatStatus(String status) {
+    String[] array = status.split(",");
+    String newStatus = "";
+    
+    for (String str: array) {
+      newStatus += str + "\n";
+    }
+    System.out.println("\n\nHERE\n" + newStatus);
+    return array;
+    
+    
+    
+  }
+  
+  //end my code
 
 }

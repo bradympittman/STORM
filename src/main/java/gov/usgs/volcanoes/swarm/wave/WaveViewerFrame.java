@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -26,6 +27,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  * Wave Viewer Frame.
@@ -58,6 +60,7 @@ public class WaveViewerFrame extends SwarmFrame implements Runnable {
    */
   public WaveViewerFrame(final SeismicDataSource sds, final String ch) {
     this(sds,ch,null);
+    
   }
   
   /**
@@ -75,6 +78,7 @@ public class WaveViewerFrame extends SwarmFrame implements Runnable {
     } else {
       this.settings = settings;
     }
+    
     spanIndex = 3;
     kill = false;
     updateThread = new Thread(this, "WaveViewerFrame-" + sds + "-" + ch);
@@ -221,4 +225,5 @@ public class WaveViewerFrame extends SwarmFrame implements Runnable {
     cf.put(prefix + ".source", dataSource.getName());
     settings.save(cf, prefix);
   }
+  
 }

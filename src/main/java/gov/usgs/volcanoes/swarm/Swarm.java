@@ -25,6 +25,7 @@ import gov.usgs.volcanoes.swarm.wave.WaveViewPanel;
 import gov.usgs.volcanoes.swarm.wave.WaveViewSettings;
 import gov.usgs.volcanoes.swarm.wave.WaveViewerFrame;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
@@ -40,9 +41,11 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
@@ -70,7 +73,7 @@ public class Swarm extends JFrame implements InternalFrameListener {
   private SwarmMenu swarmMenu;
   private final CachedDataSource cache;
 
-  private static final String TITLE = "Swarm";
+  private static final String TITLE = "Booz Allen Hamilton Swarm";
 
   private static final int LEFT = 1;
   private static final int RIGHT = 2;
@@ -95,6 +98,7 @@ public class Swarm extends JFrame implements InternalFrameListener {
    */
   public Swarm(final String[] args) {
     super(TITLE + " [" + Version.POM_VERSION + "]");
+     
     LOGGER.info("Swarm version/date: " + Version.VERSION_STRING);
     application = this;
     applicationFrame = this;
@@ -109,6 +113,7 @@ public class Swarm extends JFrame implements InternalFrameListener {
     checkJavaVersion();
     setupGlobalKeys();
     createUi();
+      
   }
 
   private void checkJavaVersion() {
@@ -385,6 +390,7 @@ public class Swarm extends JFrame implements InternalFrameListener {
               + "This is just for your information, Swarm will not be affected by this.",
           "System Clock", JOptionPane.INFORMATION_MESSAGE);
     }
+    
   }
 
   /**

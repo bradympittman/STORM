@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
  * @author Tom Parker
  */
 public class Icons {
+  
   public static final ImageIcon swarm = getIcon("images/swarm.gif");
   public static final ImageIcon camera = getIcon("images/camera.gif");
   public static final ImageIcon back = getIcon("images/back.gif");
@@ -42,7 +43,7 @@ public class Icons {
   public static final ImageIcon up = getIcon("images/up.gif");
   public static final ImageIcon wave = getIcon("images/wave.gif");
   public static final ImageIcon waveclip = getIcon("images/waveclip.gif");
-  public static final ImageIcon wavesettings = getIcon("images/wavesettings.gif");
+  //public static final ImageIcon wavesettings = getIcon("images/wavesettings.gif");
   public static final ImageIcon wavezoom = getIcon("images/wavezoom.gif");
   public static final ImageIcon xminus = getIcon("images/xminus.gif");
   public static final ImageIcon xplus = getIcon("images/xplus.gif");
@@ -91,8 +92,17 @@ public class Icons {
   public static final ImageIcon rsam_counts = getIcon("images/rsam_counts.png");
   public static final ImageIcon particle_motion = getIcon("images/particle_motion.gif");
   public static final ImageIcon locate = getIcon("images/bee.png");
+  
+  //added
+  public static final ImageIcon eye = getIcon("images/darkeye.png");
+  
+  public static final ImageIcon gear = getIcon("images/gear2.png");
+  public static final ImageIcon buttonLegend = getIcon("images/buttonLegend.png");
+  
 
   private static ImageIcon getIcon(String key) {
     return new ImageIcon(ClassLoader.getSystemResource(key));
   }
+  
+  
 }

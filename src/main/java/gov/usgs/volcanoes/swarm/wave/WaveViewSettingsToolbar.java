@@ -53,7 +53,7 @@ public class WaveViewSettingsToolbar {
    * @param keyComp key component
    */
   public void createUi(JToolBar dest, JComponent keyComp) {
-    waveSet = SwarmUtil.createToolBarButton(Icons.wavesettings, "Wave view settings (?)",
+    waveSet = SwarmUtil.createToolBarButton(Icons.gear, "Wave view settings (?)",
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             if (settingsSet.size() == 0) {

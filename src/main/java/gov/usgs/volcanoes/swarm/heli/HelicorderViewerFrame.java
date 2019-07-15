@@ -1,24 +1,30 @@
 package gov.usgs.volcanoes.swarm.heli;
 
 import gov.usgs.volcanoes.core.configfile.ConfigFile;
+
 import gov.usgs.volcanoes.core.contrib.PngEncoder;
 import gov.usgs.volcanoes.core.contrib.PngEncoderB;
 import gov.usgs.volcanoes.core.data.HelicorderData;
 import gov.usgs.volcanoes.core.data.Wave;
+import gov.usgs.volcanoes.core.data.file.FileType;
 import gov.usgs.volcanoes.core.legacy.plot.Plot;
 import gov.usgs.volcanoes.core.legacy.plot.PlotException;
 import gov.usgs.volcanoes.core.legacy.plot.render.HelicorderRenderer;
+import gov.usgs.volcanoes.core.time.Ew;
 import gov.usgs.volcanoes.core.time.J2kSec;
+import gov.usgs.volcanoes.core.ui.ExtensionFileFilter;
 import gov.usgs.volcanoes.core.ui.GridBagHelper;
 import gov.usgs.volcanoes.core.util.UiUtils;
 import gov.usgs.volcanoes.swarm.Icons;
 import gov.usgs.volcanoes.swarm.Kioskable;
 import gov.usgs.volcanoes.swarm.Swarm;
+import gov.usgs.volcanoes.swarm.SwarmConfig;
 import gov.usgs.volcanoes.swarm.SwarmFrame;
 import gov.usgs.volcanoes.swarm.SwarmUtil;
 import gov.usgs.volcanoes.swarm.SwingWorker;
 import gov.usgs.volcanoes.swarm.Throbber;
 import gov.usgs.volcanoes.swarm.chooser.DataChooser;
+import gov.usgs.volcanoes.swarm.data.FileDataSource;
 import gov.usgs.volcanoes.swarm.data.GulperListener;
 import gov.usgs.volcanoes.swarm.data.SeismicDataSource;
 import gov.usgs.volcanoes.swarm.data.SeismicDataSourceListener;
@@ -46,7 +52,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -54,6 +66,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -74,6 +87,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.commons.math3.util.Pair;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.ss.usermodel.DateUtil;
+
 
 /**
  * <code>JInternalFrame</code> that holds a helicorder.
@@ -99,7 +120,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   // seconds
   public static final int[] zoomValues = new int[] {1, 2, 5, 10, 20, 30, 
       MINUTE, 2 * MINUTE, 5 * MINUTE, 10 * MINUTE, 20 * MINUTE, 40 * MINUTE, 1 * HOUR, 90 * MINUTE};
-
+ 
   private final RefreshThread refreshThread;
   private final SeismicDataSource dataSource;
   private JPanel mainPanel;
@@ -108,6 +129,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   private JButton settingsButton;
   private JButton backButton;
   private JButton forwardButton;
+  private JButton groundTruthButton;
+  private JButton testButton;
   private JButton compX;
   private JButton expX;
   private JButton compY;
@@ -127,6 +150,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
   private final WaveViewSettings waveViewSettings;
   private final HelicorderViewerSettings settings;
+  
+  private HelicorderViewerFrame instance;
 
   private boolean gulperWorking;
   private boolean working;
@@ -172,6 +197,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     setVisible(true);
     getHelicorder();
     refreshThread = new RefreshThread();
+    instance = this;
   }
 
   /**
@@ -439,6 +465,69 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
     toolBar.addSeparator();
     
+    //Begin addition
+
+    groundTruthButton = SwarmUtil.createToolBarButton(Icons.eye,
+        "Ground Truth (T)", new ActionListener() {
+          public void actionPerformed(final ActionEvent e) {
+            
+            FileDataSource fds = FileDataSource.getInstance();
+            JFileChooser chooser = new JFileChooser();
+            chooser.resetChoosableFileFilters();
+            for (FileType ft : FileType.getKnownTypes()) {
+              ExtensionFileFilter f = new ExtensionFileFilter(ft.extension, ft.description);
+              chooser.addChoosableFileFilter(f);
+            }
+
+            chooser.setFileFilter(chooser.getAcceptAllFileFilter());
+            File lastPath = new File(SwarmConfig.getInstance().lastPath);
+            chooser.setCurrentDirectory(lastPath);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setMultiSelectionEnabled(true);
+            chooser.setDialogTitle("Choose Ground File");
+            int result = chooser.showOpenDialog(Swarm.getApplicationFrame());
+            
+            if (result == JFileChooser.APPROVE_OPTION) {
+              File fs = chooser.getSelectedFile();
+              try {
+                acceptGroundTruth(fs);
+              } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+              }
+              
+            }
+            
+            
+          }
+        });
+    UiUtils.mapKeyStrokeToButton(this, "T", "showground", groundTruthButton);
+    toolBar.add(groundTruthButton);
+    
+     
+    testButton = SwarmUtil.createToolBarButton(Icons.earth,
+        "TEST", new ActionListener() {
+          public void actionPerformed(final ActionEvent e) {
+            
+            //settings.setBottomTime(6.158521530139104E8);
+            //getHelicorder();
+            
+            //System.out.print(Ew.toDateString(6.155305706336939E8) + "\n\n");
+            //helicorderViewPanel.createWaveInset(6.158521530139104E8,0,0);
+            
+            //HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(instance);
+            //HelicorderViewerSettingsDialog d = HelicorderViewerSettingsDialog.getInstance(settings, waveViewSettings);
+            //d.setVisible(true);
+            
+            
+            JDialog d = new JDialog();
+            d.isVisible();
+            }
+        });
+    toolBar.add(testButton);
+    
+    //End addition
+    
     scaleButton = SwarmUtil.createToolBarButton(Icons.wavezoom,
         "Toggle between adjusting helicoder scale and clip", new ActionListener() {
           public void actionPerformed(final ActionEvent e) {
@@ -483,9 +572,12 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     toolBar.add(Box.createHorizontalGlue());
     throbber = new Throbber();
     toolBar.add(throbber);
+    
+    
+    
     mainPanel.add(toolBar, BorderLayout.NORTH);
   }
-
+  
   private void createListeners() {
     timeListener = new TimeListener() {
       public void timeChanged(final double j2k) {
@@ -1118,4 +1210,102 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   public void disableTag() {
     tagButton.setSelected(false);
   }
+  
+  //Add Megans code
+  
+  public void acceptGroundTruth(File fs) throws IOException {
+
+//  File myFile = new File("20190305__Run Logs-20190305.xlsx");
+   FileInputStream file = new FileInputStream(fs);
+   ArrayList<Pair<Date, Date>> dates = new ArrayList<Pair<Date, Date>>();
+
+   XSSFWorkbook wb = new XSSFWorkbook(file);
+   XSSFSheet sheet = wb.getSheetAt(0);
+
+   Iterator<Row> rowIterator = sheet.iterator();
+   int rowCount = 0;
+   int columnCount = 0;
+   while (rowIterator.hasNext())
+   {
+       columnCount = 0;
+       Row myRow = rowIterator.next();
+       Iterator<Cell> cellIterator = myRow.cellIterator();
+
+       String startTime = "";
+       String endTime = "";
+       Date javaStartDate = new Date();
+       Date javaEndDate = new Date();
+
+       while (cellIterator.hasNext())
+       {
+           Cell cell = cellIterator.next();
+           switch (cell.getCellType())
+           {
+           case NUMERIC:
+               if (rowCount > 1 && columnCount == 5) // start time
+               {
+                   //System.out.print(cell.getRichStringCellValue());
+                   //Double myTime = cell.getNumericCellValue();
+                   javaStartDate = DateUtil.getJavaDate((double)cell.getNumericCellValue());
+//                    System.out.print(javaStartDate);
+                   startTime = new SimpleDateFormat("HH:mm:ss").format(javaStartDate);
+//                    System.out.print(" ");
+               }
+               else if (rowCount > 1 && columnCount == 7) // end time
+               {
+                   javaEndDate = DateUtil.getJavaDate((double)cell.getNumericCellValue());
+//                    System.out.print(javaEndDate);
+                   endTime = new SimpleDateFormat("HH:mm:ss").format(javaEndDate);
+//                    System.out.println();
+                   
+                   
+               }
+               break;
+           }
+           columnCount++;
+       }
+       rowCount++;
+
+       if (endTime != "")
+       {
+         dates.add(new Pair<Date, Date>(javaStartDate, javaEndDate));
+         //createCustomWaveInset(javaStartDate, javaEndDate);
+
+       }
+      
+
+   }
+   HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
+   d.setVisible(true);
+   file.close();
+
+ }
+
+ public void createCustomWaveInset(Date javaStartDate, Date javaEndDate)
+ {
+   
+   float difference = javaEndDate.getTime() - javaStartDate.getTime();
+   difference = difference / 1000;
+
+   long middle = javaEndDate.getTime() + javaStartDate.getTime();
+   middle = middle / 2;
+   Date middleDate = new Date(middle);
+
+   double startEw = Ew.fromDate(javaStartDate);
+   double endEw = Ew.fromDate(javaEndDate);
+   double middleEw = Ew.fromDate(middleDate);
+
+
+//    helicorderViewPanel.createWaveInset(myEw, 307, 250);
+   settings.setBottomTime(endEw);
+   getHelicorder();
+   settings.waveZoomOffset = (int)difference / 2;
+   helicorderViewPanel.settingsChanged();
+//    helicorderViewPanel.createWaveInset(6.158098125E8, 307, 250);
+   helicorderViewPanel.createWaveInset(middleEw, 307, 250);
+   helicorderViewPanel.setStartMark(startEw);
+   helicorderViewPanel.setEndMark(endEw);
+ }
+  
+  //end megans code
 }

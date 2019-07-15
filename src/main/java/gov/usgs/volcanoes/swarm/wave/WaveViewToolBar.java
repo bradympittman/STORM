@@ -30,7 +30,7 @@ public class WaveViewToolBar {
    * @param dest  tool bar; destination.
    */
   public void createUi(JToolBar dest) {
-    waveSet = SwarmUtil.createToolBarButton(Icons.wavesettings, "Wave view settings (?)",
+    waveSet = SwarmUtil.createToolBarButton(Icons.gear, "Wave view settings (?)",
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             listener.displaySettingsDialog();

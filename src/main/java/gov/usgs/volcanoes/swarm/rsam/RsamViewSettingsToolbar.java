@@ -41,7 +41,7 @@ public class RsamViewSettingsToolbar implements SettingsListener {
   }
 
   private void createUi(final JToolBar dest, final JComponent keyComp) {
-    waveSet = SwarmUtil.createToolBarButton(Icons.wavesettings, "RSAM view settings (?)",
+    waveSet = SwarmUtil.createToolBarButton(Icons.gear, "RSAM view settings (?)",
         new ActionListener() {
           public void actionPerformed(final ActionEvent e) {
             final RsamViewSettingsDialog wvsd = RsamViewSettingsDialog.getInstance(settings);

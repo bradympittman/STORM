@@ -23,6 +23,7 @@ import gov.usgs.volcanoes.swarm.event.PickMenu;
 import gov.usgs.volcanoes.swarm.event.PickWavePanel;
 import gov.usgs.volcanoes.swarm.event.TagData;
 import gov.usgs.volcanoes.swarm.event.TagMenu;
+import gov.usgs.volcanoes.swarm.heli.HelicorderViewPanel;
 import gov.usgs.volcanoes.swarm.time.UiTime;
 import gov.usgs.volcanoes.swarm.time.WaveViewTime;
 import gov.usgs.volcanoes.swarm.wave.WaveViewSettings.ViewType;
@@ -38,6 +39,8 @@ import java.awt.Paint;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
@@ -103,6 +106,8 @@ public class WaveViewPanel extends JComponent {
   protected double j2k2;
   protected int highlightX1;
   protected int highlightX2;
+  protected int highlightY1;
+  protected int highlightY2;
   protected static Image closeImg;
   protected boolean allowClose;
   protected EventListenerList listeners = new EventListenerList();
@@ -131,11 +136,22 @@ public class WaveViewPanel extends JComponent {
   protected ArrayList<TagData> tagData = new ArrayList<TagData>();
   private TagMenu tagMenu;
   
+  
+  //added
+  private String savedUnit;
+  private double data;
+  private double dataStart;
+  private double dataStop;
+  //end added
+  
+  
+  
   /**
    * Default constructor.
    */
   public WaveViewPanel() {
     super();
+    
     swarmConfig = SwarmConfig.getInstance();
     pauseCursorMark = false;
     backgroundColor = new Color(0xf7, 0xf7, 0xf7);
@@ -151,6 +167,7 @@ public class WaveViewPanel extends JComponent {
    */
   public WaveViewPanel(WaveViewSettings s) {
     this();
+    
     settings = s;
     s.view = this;
   }
@@ -267,6 +284,10 @@ public class WaveViewPanel extends JComponent {
     for (int i = ls.length - 2; i >= 0; i -= 2) {
       if (ls[i] == WaveViewPanelListener.class) {
         ((WaveViewPanelListener) ls[i + 1]).waveClosed(this);
+        //added
+        settings.spectrogramMinFreq = settings.lastSpectrogramMinFreq;
+        settings.spectrogramMaxFreq = settings.lastSpectrogramMaxFreq;
+        //end added
       }
     }
   }
@@ -346,13 +367,18 @@ public class WaveViewPanel extends JComponent {
                 System.out.println(channel + ": " + J2kSec.toDateString(j2k1));
               } else if (!e.isShiftDown()) {
                 highlightX1 = highlightX2 = x;
+                highlightY1 = highlightY2 = y; 
                 dragging = true;
               }
             }
           }
         }
 
+        //added
+        dataStart = data;
+        //end added
         fireMousePressed(e);
+        
       }
 
       public void mouseReleased(MouseEvent e) {
@@ -364,7 +390,23 @@ public class WaveViewPanel extends JComponent {
             double et = Math.max(j2k1, j2k2);
             zoom(st, et);
             fireZoomed(e, getStartTime(), getEndTime(), st, et);
+            
           }
+          //added
+          if (savedUnit != null && !savedUnit.isBlank()) {
+            if (savedUnit.equals("Frequency (Hz)")) {
+              if (dataStart > data) {
+                settings.spectrogramMaxFreq = dataStart;
+                settings.spectrogramMinFreq = data;
+              } else {
+                settings.spectrogramMaxFreq = data;
+                settings.spectrogramMinFreq = dataStart;
+              }
+            }
+            
+            settings.notifyView();
+          }
+          //end added
           repaint();
         }
 
@@ -415,9 +457,12 @@ public class WaveViewPanel extends JComponent {
               && x < size.width - rightWidth) {
             j2k2 = x * t[0] + t[1];
             highlightX2 = x;
+            highlightY2 = y;
             repaint();
           }
         }
+        
+        
       }
     });
   }
@@ -626,6 +671,10 @@ public class WaveViewPanel extends JComponent {
         }
 
         status.append(String.format(", %s: %.3f", unit, multiplier * yi + offset));
+        //added
+        savedUnit = unit;
+        data = multiplier * yi + offset;
+        //end added
       } else {
         double xi = time;
         if (settings.viewType == ViewType.SPECTRA && settings.spectraLogFreq) {
@@ -698,8 +747,11 @@ public class WaveViewPanel extends JComponent {
         }
       });
     }
-
+    //edited
+    HelicorderViewPanel.savedStatus = status.toString();
+    //end edit
     return !status.equals(" ");
+    
   }
 
   /**
@@ -1448,10 +1500,21 @@ public class WaveViewPanel extends JComponent {
   private void paintDragBox(Graphics2D g2) {
     int x1 = Math.min(highlightX1, highlightX2);
     int x2 = Math.max(highlightX1, highlightX2);
+    int y1 = Math.min(highlightY1,  highlightY2);
+    int y2 = Math.max(highlightY1,  highlightY2);
+    
     int width = x2 - x1 + 1;
+    int height = y2 - y1 + 1;
     Paint pnt = g2.getPaint();
     g2.setPaint(new Color(255, 255, 0, 128));
-    g2.fillRect(x1, yOffset + 1, width, getSize().height - bottomHeight - yOffset);
+    if (WaveViewSettings.viewType == ViewType.SPECTROGRAM)
+    {
+      g2.fillRect(x1, y1 + 1, width, height);
+    }
+    else
+    {
+      g2.fillRect(x1, yOffset + 1, width, getSize().height - bottomHeight - yOffset);
+    }
     g2.setPaint(pnt);
   }
 
@@ -1573,4 +1636,9 @@ public class WaveViewPanel extends JComponent {
   public void setTagMenu(TagMenu tagMenu) {
     this.tagMenu = tagMenu;
   }
+  
+  
+  
 }
+
+
