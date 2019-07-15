@@ -100,7 +100,7 @@ public class WaveViewSettings {
   static {
     DEFAULT_WAVE_VIEW_SETTINGS = new WaveViewSettings();
     // view option
-    DEFAULT_WAVE_VIEW_SETTINGS.viewType = ViewType.WAVE;
+    DEFAULT_WAVE_VIEW_SETTINGS.viewType = ViewType.SPECTROGRAM;
     // wave options
     DEFAULT_WAVE_VIEW_SETTINGS.removeBias = true;
     DEFAULT_WAVE_VIEW_SETTINGS.autoScaleAmp = true;
@@ -118,13 +118,13 @@ public class WaveViewSettings {
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMinPower = 1;
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMaxPower = 5;
     // spectrogram options
-    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectrogramPower = false;
-    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectrogramPowerMemory = true;
+    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectrogramPower = true;
+    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectrogramPowerMemory = false;
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMinPower = 20;
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxPower = 120;
-    DEFAULT_WAVE_VIEW_SETTINGS.spectrogramOverlap = 0.859375;
+    DEFAULT_WAVE_VIEW_SETTINGS.spectrogramOverlap = 0.95;
     DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMinFreq = 0;
-    DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxFreq = 25;
+    DEFAULT_WAVE_VIEW_SETTINGS.spectrogramMaxFreq = 100;
     DEFAULT_WAVE_VIEW_SETTINGS.lastSpectrogramMinFreq = 0;
     DEFAULT_WAVE_VIEW_SETTINGS.lastSpectrogramMaxFreq = 25;
     DEFAULT_WAVE_VIEW_SETTINGS.binSize = 2;
