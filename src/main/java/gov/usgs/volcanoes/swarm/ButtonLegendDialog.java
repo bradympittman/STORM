@@ -31,11 +31,32 @@ public class ButtonLegendDialog extends JDialog {
     
     ImageIcon[] icons = {Icons.pin, Icons.settings,Icons.left,
         Icons.right, Icons.xminus, Icons.xplus, Icons.yminus,
-        Icons.yplus};
+        Icons.yplus, Icons.zoomplus, Icons.zoomminus, Icons.gear,
+        Icons.wave, Icons.spectra, Icons.spectrogram, 
+        Icons.particle_motion, Icons.clipboard, Icons.delete,
+        Icons.camera, Icons.tag, Icons.wavezoom, Icons.heli,
+        Icons.monitor, Icons.rsam_values, Icons.earth, Icons.wave_folder,
+        Icons.save, Icons.saveall, Icons.helilink, Icons.clock,
+        Icons.geosort, Icons.resize, Icons.deleteall, Icons.pick,
+        Icons.new_server, Icons.refresh};
     String[] description = {"Helicorder always on top",
         "Helicorder view settings", "Scroll back time",
         "Scroll forward time", "Compress X-axis", "Expand X-axis",
-        "Compress Y-axis", "Expand Y-axis"};
+        "Compress Y-axis", "Expand Y-axis", "Decrease zoom time window",
+        "Increase zoom time window", "Wave view settings",
+        "Wave view / Opens waves in the real-times view window",
+        "Spectra view", "Spectogram view", "Particle motion view", 
+        "Copy inset to clipboard / Puts waves on the clipboard", "Remove inset wave", 
+        "Save helicorder image / Save clipboard image", "Tag mode", 
+        "Toggle between adjusting helicorder scale and clip",
+        "Opens helicorder views", "Puts waves on the real-time monitor",
+        "Opens RSAM viewr", "Shows channels on a map", "Shows channels on a map",
+        "Open a Saved Wave", "Save Selected Wave", "Save all waves",
+        "Synchronize times with helicorder wave",
+        "Synchronize times with selected wave",
+        "Sort waves by nearest to selected wave",
+        "Set clipboard wave size", "Remove all waves from clipboard",
+        "Pick mode", "New data source", "Refresh data source"};
     
     JPanel panel = new JPanel(new GridLayout(icons.length/2, 4));
     
