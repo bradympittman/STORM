@@ -30,7 +30,7 @@ import javax.swing.border.LineBorder;
  * A class that shows an about dialog with some extra controls.
  * 
  * @author Dan Cervelli
- */ 
+ */  
 public class AboutDialog extends JDialog implements Runnable {
   private static final long serialVersionUID = -1;
   private static final JFrame applicationFrame = Swarm.getApplicationFrame();
