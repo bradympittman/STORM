@@ -3,6 +3,7 @@ package gov.usgs.volcanoes.swarm;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 
@@ -17,8 +18,8 @@ public class ButtonLegendDialog extends JDialog {
   private static final long serialVersionUID = -1;
   private static final JFrame applicationFrame = Swarm.getApplicationFrame();
 
-  private static final int WIDTH = 300;
-  private static int height = 0;
+  private static final int WIDTH = 700;
+  private static int height = 800;
 
   /**
    * Construct an about dialog.
@@ -44,11 +45,11 @@ public class ButtonLegendDialog extends JDialog {
         "Scroll forward time", "Compress X-axis", "Expand X-axis",
         "Compress Y-axis", "Expand Y-axis", "Decrease zoom time window",
         "Increase zoom time window", "Wave view settings",
-        "Wave view / Opens waves in the real-times view window",
+        "Wave view /\n Opens waves in the\n real-times view window",
         "Spectra view", "Spectogram view", "Particle motion view", 
-        "Copy inset to clipboard / Puts waves on the clipboard", "Remove inset wave", 
-        "Save helicorder image / Save clipboard image", "Tag mode", 
-        "Toggle between adjusting helicorder scale and clip",
+        "Copy inset to clipboard /\n Puts waves on the clipboard", "Remove inset wave", 
+        "Save helicorder image /\n Save clipboard image", "Tag mode", 
+        "Toggle between adjusting\nhelicorder scale and clip",
         "Opens helicorder views", "Puts waves on the real-time monitor",
         "Opens RSAM viewr", "Shows channels on a map", "Shows channels on a map",
         "Open a Saved Wave", "Save Selected Wave", "Save all waves",
@@ -58,14 +59,19 @@ public class ButtonLegendDialog extends JDialog {
         "Set clipboard wave size", "Remove all waves from clipboard",
         "Pick mode", "New data source", "Refresh data source"};
     
-    JPanel panel = new JPanel(new GridLayout(icons.length/2, 4));
+    JPanel panel = new JPanel(new GridLayout(15, 1));
     
     for (int x = 0; x < icons.length && x < description.length; x++) {
+      JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
       JLabel l = new JLabel(icons[x]);
       l.setBorder(new LineBorder(Color.black));
-      panel.add(l);
-      panel.add(new JLabel(description[x]));
-      height += 50;
+      buttonPanel.add(l);
+      for (String text: description[x].split("\n")) {
+        buttonPanel.add(new JLabel(text));
+      }
+      
+      panel.add(buttonPanel);
+      //height += 50;
 
       
     }
