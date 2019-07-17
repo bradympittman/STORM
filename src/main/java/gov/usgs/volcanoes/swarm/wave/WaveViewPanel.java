@@ -78,6 +78,8 @@ public class WaveViewPanel extends JComponent {
   protected SpectraRenderer spectraRenderer;
   protected Wave wave;
   protected double startTime;
+  protected double ogStartTime;
+  protected double ogEndTime;
   protected double endTime;
   protected WaveViewSettings settings;
   protected double minAmp = 1E300;
@@ -141,7 +143,6 @@ public class WaveViewPanel extends JComponent {
   private String savedUnit;
   private double data;
   private double dataStart;
-  private double dataStop;
   //end added
   
   
@@ -183,6 +184,8 @@ public class WaveViewPanel extends JComponent {
 
     channel = p.channel;
     source = p.source;
+    ogStartTime = p.ogStartTime;
+    ogEndTime = p.ogEndTime;
     startTime = p.startTime;
     endTime = p.endTime;
     maxSpectraPower = p.maxSpectraPower;
@@ -287,6 +290,7 @@ public class WaveViewPanel extends JComponent {
         //added
         settings.spectrogramMinFreq = settings.lastSpectrogramMinFreq;
         settings.spectrogramMaxFreq = settings.lastSpectrogramMaxFreq;
+        
         //end added
       }
     }
@@ -531,6 +535,10 @@ public class WaveViewPanel extends JComponent {
   public double getStartTime() {
     return startTime;
   }
+  
+  public double getOGStartTime() {
+    return ogStartTime;
+  }
 
   public void setStartTime(double startTime) {
     this.startTime = startTime;
@@ -538,6 +546,10 @@ public class WaveViewPanel extends JComponent {
 
   public double getEndTime() {
     return endTime;
+  }
+  
+  public double getOGEndTime() {
+    return ogEndTime;
   }
 
   public void setEndTime(double endTime) {
@@ -763,6 +775,12 @@ public class WaveViewPanel extends JComponent {
   public void setWave(Wave sw, double st, double et) {
     wave = sw;
     startTime = st;
+    if (ogStartTime == 0.0) {
+      ogStartTime = st;
+    }
+    if (ogEndTime == 0.0) {
+      ogEndTime = et;
+    }
     endTime = et;
     processSettings();
   }

@@ -27,7 +27,6 @@ public class ButtonLegendDialog extends JDialog {
   public ButtonLegendDialog() {
     super(applicationFrame, "Button Legend", true);
     
-    this.setLocation();
     this.setResizable(true);
     
     ImageIcon[] icons = {Icons.pin, Icons.settings,Icons.left,
@@ -85,12 +84,6 @@ public class ButtonLegendDialog extends JDialog {
 
   }
 
-  private void setLocation() {
-    Dimension parentSize = applicationFrame.getSize();
-    Point parentLoc = applicationFrame.getLocation();
-    this.setLocation(parentLoc.x + (parentSize.width / 2 - WIDTH / 2),
-        parentLoc.y + (parentSize.height / 2 - height / 2));
-  }
   
 
 
