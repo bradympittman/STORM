@@ -173,6 +173,7 @@ public class EventDialog extends SwarmFrame {
     builder.appendSeparator("Event Details");
 
     eventType = new JComboBox<EventType>(EventType.values());
+    eventType.setEditable(true);
     eventType.setSelectedItem(EventType.EARTHQUAKE);
     builder.append("Event Type", eventType);
     builder.nextLine();
