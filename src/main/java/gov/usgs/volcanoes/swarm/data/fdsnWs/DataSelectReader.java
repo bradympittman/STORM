@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import gov.usgs.volcanoes.swarm.Swarm;
-import gov.usgs.volcanoes.swarm.Version;
 
 /**
  * The data select reader reads data from the web services. This class a based
@@ -39,7 +38,7 @@ public class DataSelectReader extends StringMSeedQueryReader {
   /** The URL base. */
   protected String urlBase;
   /** The user agent. */
-  protected String userAgent = "Swarm/" + Version.POM_VERSION;
+  protected String userAgent = "Swarm/" + gov.usgs.volcanoes.core.Version.POM_VERSION;
   /** The default web services URL. */
   public static final String DEFAULT_WS_URL = "http://service.iris.edu/fdsnws/dataselect/1/query";
 
