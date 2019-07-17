@@ -28,14 +28,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/commons-codec-1.11.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/commons-collections4-4.2.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/commons-compress-1.18.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/commons-math3-3.6.1.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/curvesapi-1.05.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/poi-4.0.1.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/poi-ooxml-4.0.1.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/poi-ooxml-schemas-4.0.1.jar"/>
-	<classpathentry kind="lib" path="/Users/alexiskubica/Desktop/Archives/xmlbeans-3.0.2 (1).jar"/>
+	<classpathentry kind="lib" path="Archives/commons-codec-1.11.jar"/>
+	<classpathentry kind="lib" path="Archives/commons-collections4-4.2.jar"/>
+	<classpathentry kind="lib" path="Archives/commons-compress-1.18.jar"/>
+	<classpathentry kind="lib" path="Archives/commons-math3-3.6.1.jar"/>
+	<classpathentry kind="lib" path="Archives/curvesapi-1.05.jar"/>
+	<classpathentry kind="lib" path="Archives/poi-4.0.1.jar"/>
+	<classpathentry kind="lib" path="Archives/poi-ooxml-4.0.1.jar"/>
+	<classpathentry kind="lib" path="Archives/poi-ooxml-schemas-4.0.1.jar"/>
+	<classpathentry kind="lib" path="Archives/xmlbeans-3.0.2 (1).jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
