@@ -1089,17 +1089,19 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
 
     public void keyPressed(KeyEvent e) {
       if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-        System.out.println(savedStatus);
         showSavedStausBox(savedStatus);
         
       }
       
       if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-        
+        System.out.println(insetWavePanel.getOGStartTime());
+        System.out.println(insetWavePanel.getOGEndTime());
         insetWavePanel.getSettings().spectrogramMinFreq = insetWavePanel.getSettings().lastSpectrogramMinFreq;
         insetWavePanel.getSettings().spectrogramMaxFreq = insetWavePanel.getSettings().lastSpectrogramMaxFreq;
         insetWavePanel.getSettings().notifyView();
         insetWavePanel.repaint();
+        //parent.createCustomWaveInset(javaStartDate, javaEndDate);
+        loadInsetWave(insetWavePanel.getOGStartTime(), insetWavePanel.getOGEndTime());
       }
       
     }
