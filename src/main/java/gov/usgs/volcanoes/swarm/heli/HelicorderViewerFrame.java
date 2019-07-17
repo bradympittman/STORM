@@ -57,8 +57,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -174,6 +176,10 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   public GulperListener gulperListener;
 
   private SeismicDataSourceListener dataListener;
+
+  private File groundTruthFile;
+
+  private String dateString;
 
   /**
    * Constructor with configuration file as parameter.
@@ -488,9 +494,10 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
             int result = chooser.showOpenDialog(Swarm.getApplicationFrame());
             
             if (result == JFileChooser.APPROVE_OPTION) {
-              File fs = chooser.getSelectedFile();
+              File[] fs = chooser.getSelectedFiles();
               try {
-                acceptGroundTruth(fs);
+                groundTruthFile = fs[0];
+                acceptGroundTruth(groundTruthFile);
               } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -1215,97 +1222,206 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
   public void acceptGroundTruth(File fs) throws IOException {
 
-//  File myFile = new File("20190305__Run Logs-20190305.xlsx");
-   FileInputStream file = new FileInputStream(fs);
-   ArrayList<Pair<Date, Date>> dates = new ArrayList<Pair<Date, Date>>();
+//  File myFile = new File(“20190305__Run Logs-20190305.xlsx”);
+    FileInputStream file = new FileInputStream(fs);
+    ArrayList<Pair<Date, Date>> dates = new ArrayList<Pair<Date, Date>>();
+  
+    XSSFWorkbook wb = new XSSFWorkbook(file);
+    XSSFSheet sheet = wb.getSheetAt(0);
 
-   XSSFWorkbook wb = new XSSFWorkbook(file);
-   XSSFSheet sheet = wb.getSheetAt(0);
+    int underIndex = 0;
+    String filename = groundTruthFile.getName();
+    int fileLength = filename.length();
+    for (int i = 0; i < fileLength; i++)
+    {
+      if (filename.charAt(i) == '_' )
+      {
+        underIndex = i;
+      }
+    }
+    dateString = filename.substring(0, underIndex - 1);
+    
+    int year = Integer.parseInt(dateString.substring(0, 4));
+//    int year = 1989;
+    int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
+    int day = Integer.parseInt(dateString.substring(6));
+  
+    Iterator<Row> rowIterator = sheet.iterator();
+    int rowCount = 0;
+    int columnCount = 0;
+    while (rowIterator.hasNext())
+    {
+        columnCount = 0;
+        Row myRow = rowIterator.next();
+        Iterator<Cell> cellIterator = myRow.cellIterator();
+  
+        String startTime = "";
+        String endTime = "";
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("EST"));
+//        Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        cal.set(year, month, day);
+        Date javaStartDate = new Date();
+        Date javaEndDate = new Date();
+  
+        while (cellIterator.hasNext())
+        {
+            Cell cell = cellIterator.next();
+            switch (cell.getCellType())
+            {
+            case NUMERIC:
+                if (rowCount > 1 && columnCount == 5) // start time
+                {
+                    Date javaStart = DateUtil.getJavaDate((double)cell.getNumericCellValue());
+//                    SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
+//                    star.setTimeZone(TimeZone.getTimeZone("GMT+02"));
+                    startTime = new SimpleDateFormat("HH:mm:ss").format(javaStart);
+                    
+//                    String swarmStartTime = star.format(javaStart);
+//                    
+////  //                    System.out.print(” “);
+//                    int hour = Integer.parsseInt(swarmStartTime.substring(0, 2));
+//                    int min = Integer.parseInt(swarmStartTime.substring(3, 5));
+//                    int sec = Integer.parseInt(swarmStartTime.substring(6));
+                    int hour = Integer.parseInt(startTime.substring(0, 2));
+                    int min = Integer.parseInt(startTime.substring(3, 5));
+                    int sec = Integer.parseInt(startTime.substring(6));
+                    cal.set(Calendar.HOUR_OF_DAY, hour);
+                    cal.set(Calendar.MINUTE, min);
+                    cal.set(Calendar.SECOND, sec);
+//
+//                    if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
+//                    {
+//                      cal.add(Calendar.DATE, -1);
+//                    }
+                    
+                    javaStartDate = cal.getTime();
+                    
 
-   Iterator<Row> rowIterator = sheet.iterator();
-   int rowCount = 0;
-   int columnCount = 0;
-   while (rowIterator.hasNext())
-   {
-       columnCount = 0;
-       Row myRow = rowIterator.next();
-       Iterator<Cell> cellIterator = myRow.cellIterator();
+                }
+                else if (rowCount > 1 && columnCount == 7) // end time
+                {
+                  Date javaEnd = DateUtil.getJavaDate((double)cell.getNumericCellValue());
+                  SimpleDateFormat end = new SimpleDateFormat("HH:mm:ss");
+//                  end.setTimeZone(TimeZone.getTimeZone("UTC"));
+                  endTime = new SimpleDateFormat("HH:mm:ss").format(javaEnd);
+//                  endTime = end.format(javaEnd);
+                  
+////                    System.out.print(” “);
+//                  int hour = Integer.parseInt(swarmEndTime.substring(0, 2));
+//                  int min = Integer.parseInt(swarmEndTime.substring(3, 5));
+//                  int sec = Integer.parseInt(swarmEndTime.substring(6));
+                  int hour = Integer.parseInt(endTime.substring(0, 2));
+                  int min = Integer.parseInt(endTime.substring(3, 5));
+                  int sec = Integer.parseInt(endTime.substring(6));
+                  cal.set(Calendar.HOUR_OF_DAY, hour);
+                  cal.set(Calendar.MINUTE, min);
+                  cal.set(Calendar.SECOND, sec);
 
-       String startTime = "";
-       String endTime = "";
-       Date javaStartDate = new Date();
-       Date javaEndDate = new Date();
+//                  if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
+//                  {
+//                    cal.add(Calendar.DATE, -1);
+//                  }
+                  javaEndDate = cal.getTime();
+//                  System.out.println(Ew.fromDate(javaEndDate));
+  
+                }
+                break;
+            }
+            columnCount++;
+        }
+        rowCount++;
+  
+        if (endTime != "")
+        {
+//          System.out.println("start time " + javaStartDate);
+//          System.out.println("end time " + javaEndDate);
+          
+          dates.add(new Pair<Date, Date>(javaStartDate, javaEndDate));
+          //createCustomWaveInset(javaStartDate, javaEndDate);
+  
+        }
+  
+    }
+    HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
+//    d.setVisible(true);
+    file.close();
+  
+  }
 
-       while (cellIterator.hasNext())
-       {
-           Cell cell = cellIterator.next();
-           switch (cell.getCellType())
-           {
-           case NUMERIC:
-               if (rowCount > 1 && columnCount == 5) // start time
-               {
-                   //System.out.print(cell.getRichStringCellValue());
-                   //Double myTime = cell.getNumericCellValue();
-                   javaStartDate = DateUtil.getJavaDate((double)cell.getNumericCellValue());
-//                    System.out.print(javaStartDate);
-                   startTime = new SimpleDateFormat("HH:mm:ss").format(javaStartDate);
-//                    System.out.print(" ");
-               }
-               else if (rowCount > 1 && columnCount == 7) // end time
-               {
-                   javaEndDate = DateUtil.getJavaDate((double)cell.getNumericCellValue());
-//                    System.out.print(javaEndDate);
-                   endTime = new SimpleDateFormat("HH:mm:ss").format(javaEndDate);
-//                    System.out.println();
-                   
-                   
-               }
-               break;
-           }
-           columnCount++;
-       }
-       rowCount++;
+  public void createCustomWaveInset(Date javaStartDate, Date javaEndDate)
+  {
+    int underIndex = 0;
+    String filename = groundTruthFile.getName();
+    int fileLength = filename.length();
+    for (int i = 0; i < fileLength; i++)
+    {
+      if (filename.charAt(i) == '_' )
+      {
+        underIndex = i;
+      }
+    }
+    String dateString = filename.substring(0, underIndex - 1);
+    
+//    int year = Integer.parseInt(dateString.substring(0, 4));
+    int year = 1989;
+    int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
+    int day = Integer.parseInt(dateString.substring(6));
+    
+    SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
+    star.setTimeZone(TimeZone.getTimeZone("GMT+02"));
+    String startTime = new SimpleDateFormat("HH:mm:ss").format(javaStartDate);
+    String swarmStartTime = star.format(javaStartDate);
+    
+    Calendar cal = Calendar.getInstance();
+    cal.set(year, month, day);
+    
+    int hour = Integer.parseInt(swarmStartTime.substring(0, 2));
+    int min = Integer.parseInt(swarmStartTime.substring(3, 5));
+    int sec = Integer.parseInt(swarmStartTime.substring(6));
 
-       if (endTime != "")
-       {
-         dates.add(new Pair<Date, Date>(javaStartDate, javaEndDate));
-         //createCustomWaveInset(javaStartDate, javaEndDate);
+    cal.set(Calendar.HOUR_OF_DAY, hour);
+    cal.set(Calendar.MINUTE, min);
+    cal.set(Calendar.SECOND, sec);
 
-       }
-      
+    if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
+    {
+      cal.add(Calendar.DATE, -1);
+    }
+    javaStartDate = cal.getTime();
+    
+    SimpleDateFormat end = new SimpleDateFormat("HH:mm:ss");
+    end.setTimeZone(TimeZone.getTimeZone("GMT+02"));
+    String endTime = new SimpleDateFormat("HH:mm:ss").format(javaEndDate);
+    String swarmEndTime = end.format(javaEndDate);
 
-   }
-   HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
-   d.setVisible(true);
-   file.close();
+    hour = Integer.parseInt(swarmEndTime.substring(0, 2));
+    min = Integer.parseInt(swarmEndTime.substring(3, 5));
+    sec = Integer.parseInt(swarmEndTime.substring(6));
 
- }
+    cal.set(Calendar.HOUR_OF_DAY, hour);
+    cal.set(Calendar.MINUTE, min);
+    cal.set(Calendar.SECOND, sec);
 
- public void createCustomWaveInset(Date javaStartDate, Date javaEndDate)
- {
-   
-   float difference = javaEndDate.getTime() - javaStartDate.getTime();
-   difference = difference / 1000;
+    javaEndDate = cal.getTime();
+  
+    float difference = javaEndDate.getTime() - javaStartDate.getTime();
+    difference = difference / 1000;
+  
+    long middle = javaEndDate.getTime() + javaStartDate.getTime();
+    middle = middle / 2;
+    Date middleDate = new Date(middle);
+  
+    double startEw = Ew.fromDate(javaStartDate);
+    double endEw = Ew.fromDate(javaEndDate);
+    double middleEw = Ew.fromDate(middleDate);
 
-   long middle = javaEndDate.getTime() + javaStartDate.getTime();
-   middle = middle / 2;
-   Date middleDate = new Date(middle);
-
-   double startEw = Ew.fromDate(javaStartDate);
-   double endEw = Ew.fromDate(javaEndDate);
-   double middleEw = Ew.fromDate(middleDate);
-
-
-//    helicorderViewPanel.createWaveInset(myEw, 307, 250);
-   settings.setBottomTime(endEw);
-   getHelicorder();
-   settings.waveZoomOffset = (int)difference / 2;
-   helicorderViewPanel.settingsChanged();
-//    helicorderViewPanel.createWaveInset(6.158098125E8, 307, 250);
-   helicorderViewPanel.createWaveInset(middleEw, 307, 250);
-   helicorderViewPanel.setStartMark(startEw);
-   helicorderViewPanel.setEndMark(endEw);
- }
+    getHelicorder();
+    settings.waveZoomOffset = (int)difference / 2;
+    helicorderViewPanel.settingsChanged();
+    helicorderViewPanel.createWaveInset(middleEw, 307, 250);
+    helicorderViewPanel.setStartMark(startEw);
+    helicorderViewPanel.setEndMark(endEw);
+  }
   
   //end megans code
 }

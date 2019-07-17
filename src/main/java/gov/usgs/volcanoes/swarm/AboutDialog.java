@@ -1,5 +1,6 @@
 package gov.usgs.volcanoes.swarm;
 
+import gov.usgs.volcanoes.core.Version;
 import gov.usgs.volcanoes.swarm.data.CachedDataSource;
 
 import java.awt.BorderLayout;

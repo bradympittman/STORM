@@ -2,6 +2,7 @@ package gov.usgs.volcanoes.swarm;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 
+import gov.usgs.volcanoes.core.Version;
 import gov.usgs.volcanoes.core.configfile.ConfigFile;
 import gov.usgs.volcanoes.core.data.Wave;
 import gov.usgs.volcanoes.core.quakeml.Event;
