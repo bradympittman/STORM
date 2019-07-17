@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
@@ -182,6 +183,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
   public String dateString;
 
+  public static File excelFilePath;
+
   public static XSSFWorkbook workbook;
 
   public static int rowNum;
@@ -190,7 +193,11 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
   public static XSSFSheet sheet;
 
-  public static FileOutputStream out;
+  public static FileOutputStream outFreq;
+  
+  public static File outFile;
+  
+  public static String channelHeli;
 
   /**
    * Constructor with configuration file as parameter.
@@ -258,15 +265,31 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     System.out.println("creating UI");
     workbook = new XSSFWorkbook();
     rowNum = 0;
-    cellNum = 0;
+    
+    List<String> channels = this.getDataSource().getChannels();
     sheet = workbook.createSheet("Frequency Data");
+    excelFilePath = new File("C:\\Users\\597663\\git\\bahswarm\\Frequencies.xlsx");
+    
+    XSSFWorkbook workbookFreq = new XSSFWorkbook();
+
+    //Create file system using specific name
+    FileOutputStream out;
     try {
-      out = new FileOutputStream(new File("FrequencyValues.xlsx"));
-      System.out.println("made");
-    } catch (FileNotFoundException e) {
+      sheet = workbookFreq.createSheet("Frequency Data");
+      out = new FileOutputStream(excelFilePath);
+      workbookFreq.write(out);
+      out.close();
+    } catch (FileNotFoundException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+
+    //write operation workbook using file out object
+    
+    
     mainPanel = new JPanel(new BorderLayout());
     createHeliPanel();
     createToolBar();
@@ -277,6 +300,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     setSize(800, 750);
     setContentPane(mainPanel);
+
   }
 
   public void addLinkListeners() {
@@ -634,6 +658,21 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
         dataSource.notifyDataNotNeeded(settings.channel, helicorderViewPanel.getStartTime(),
             helicorderViewPanel.getEndTime(), gulperListener);
         dataSource.close();
+        
+//        FileOutputStream output_file = 
+//        try {
+//          out = new FileOutputStream(new File("Frequency.xlsx"));
+//        } catch (FileNotFoundException e2) {
+//          // TODO Auto-generated catch block
+//          e2.printStackTrace();
+//        }
+       
+        try {
+          outFreq.close();
+        } catch (IOException e3) {
+          // TODO Auto-generated catch block
+          e3.printStackTrace();
+        }
       }
 
       @Override
@@ -926,6 +965,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
           if (helicorderViewPanel != null) {
             tc = settings.timeChunk;
           }
+          
+          channelHeli = settings.channel;
 
           if (!HelicorderViewerFrame.this.isClosed) {
             hd = dataSource.getHelicorder(settings.channel.replace(' ', '$'), before - tc, end + tc,
@@ -1445,6 +1486,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     helicorderViewPanel.setStartMark(startEw);
     helicorderViewPanel.setEndMark(endEw);
   }
+  
   
   //end megans code
 }

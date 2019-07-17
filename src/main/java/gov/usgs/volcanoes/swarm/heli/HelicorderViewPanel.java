@@ -49,6 +49,10 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +68,10 @@ import javax.swing.event.EventListenerList;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * A <code>JComponent</code> for displaying and interacting with a helicorder.
@@ -1180,6 +1188,14 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     f.setOpaque(true);
     f.setBackground(Color.white);
     SwarmInternalFrames.add(f);
+//    
+//    try {
+//    HelicorderViewerFrame.workbook.write(HelicorderViewerFrame.Freq);
+//    } catch (IOException e1) {
+//      // TODO Auto-generated catch block
+//      e1.printStackTrace();
+//    }
+    
   }
   
   private String[] formatStatus(String status) {
@@ -1202,27 +1218,77 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     String frequency = newStatus.substring(beginIndex);
     System.out.println("frequency " + frequency);
     
-    Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
-    HelicorderViewerFrame.rowNum++;
-    Cell cell = row.createCell(HelicorderViewerFrame.cellNum);
-    cell.setCellValue(frequency);
+//    Row row = HelicorderViewerFrame.sheet.getRow(HelicorderViewerFrame.rowNum);
+//    row.createCell(0).setCellValue(frequency);
+//    HelicorderViewerFrame.sheet.getRow(0).getCell(0).setCellValue(frequency);
     
-    try {
-      HelicorderViewerFrame.workbook.write(HelicorderViewerFrame.out);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    try {
-      HelicorderViewerFrame.out.close();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    
+//    XSSFSheet sheet = HelicorderViewerFrame.workbook.getSheetAt(0);
+//    System.out.println(sheet.getSheetName());
+//    System.out.println("sheet " + sheet);
+    Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
+    row.createCell(0).setCellValue(frequency);
+    HelicorderViewerFrame.rowNum++;
+    System.out.println("row num " + HelicorderViewerFrame.rowNum);
+
+
+
+//    
+//    Row row = HelicorderViewerFrame.sheet.createRow(0);
+//    HelicorderViewerFrame.rowNum++;
+//    row.createCell(0).setCellValue(frequency);
+//    row.createCell(1).setCellValue(frequency);
+//    Cell cell = row.createCell(0);
+//    cell.setCellValue(frequency);
+//    HelicorderViewerFrame.cellNum++;
+    
+    askAddToSpreadsheet(newStatus);
+    
     
     return array;
     
+  }
+  
+  public void askAddToSpreadsheet(String newStatus)
+  {
+    int beginIndex = newStatus.indexOf("Frequency");
+    String frequency = newStatus.substring(beginIndex);
     
+    int beginDateIndex = beginIndex - 31;
+    String date = newStatus.substring(beginDateIndex, beginIndex);
+    System.out.println("date " + date);
+    
+//    String excelFilePath = HelicorderViewerFrame.outFile.getName();
+    System.out.println(HelicorderViewerFrame.excelFilePath);
+    
+    try {
+        FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
+//        System.out.println(new File(excelFilePath));
+//        System.out.println(inputStream);
+        Workbook workbook = WorkbookFactory.create(inputStream);
+        System.out.println(workbook);
+
+        XSSFSheet sheet = (XSSFSheet)workbook.getSheetAt(0);
+        int rowCount = sheet.getLastRowNum();
+        System.out.println("rowcount " + HelicorderViewerFrame.rowNum);
+        Row row = sheet.createRow(HelicorderViewerFrame.rowNum - 1);
+//        HelicorderViewerFrame.rowNum++;
+        Cell cell = row.createCell(0);
+        cell.setCellValue(date);
+        Cell cell2 = row.createCell(1);
+        cell2.setCellValue(frequency);
+
+        inputStream.close();
+
+        FileOutputStream outputStream = new FileOutputStream("Frequencies.xlsx");
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+         
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } 
     
   }
   
