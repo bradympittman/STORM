@@ -26,6 +26,7 @@ import gov.usgs.volcanoes.swarm.wave.StatusTextArea;
 import gov.usgs.volcanoes.swarm.wave.WaveClipboardFrame;
 import gov.usgs.volcanoes.swarm.wave.WaveViewPanel;
 import gov.usgs.volcanoes.swarm.wave.WaveViewPanelAdapter;
+import gov.usgs.volcanoes.swarm.wave.WaveViewSettings;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -1265,9 +1266,18 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     int beginIndex = newStatus.indexOf("Frequency");
     String frequency = newStatus.substring(beginIndex);
     
-    int beginDateIndex = beginIndex - 31;
-    String date = newStatus.substring(beginDateIndex, beginIndex);
-    System.out.println("date " + date);
+    String date = null;
+    
+    if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
+    {
+      int beginDateIndex = beginIndex - 31;
+      date = newStatus.substring(beginDateIndex, beginIndex);
+      System.out.println("date " + date);
+    }
+    else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
+    {
+      
+    }
     
 //    String excelFilePath = HelicorderViewerFrame.outFile.getName();
     System.out.println(HelicorderViewerFrame.excelFilePath);
