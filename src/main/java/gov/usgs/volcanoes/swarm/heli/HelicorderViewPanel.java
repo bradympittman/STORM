@@ -49,6 +49,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +61,9 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 /**
  * A <code>JComponent</code> for displaying and interacting with a helicorder.
@@ -1186,6 +1190,36 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       newStatus += str + "\n";
     }
     System.out.println("\n\nHERE\n" + newStatus);
+    
+//    for (int i = 0; i < newStatus.length(); i++)
+//    {
+//      System.out.println(i + newStatus.);
+//    }
+//   
+    int beginIndex = newStatus.indexOf("Frequency");
+//    System.out.println(beginIndex);
+//    System.out.println(newStatus.substring(beginIndex));
+    String frequency = newStatus.substring(beginIndex);
+    System.out.println("frequency " + frequency);
+    
+    Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
+    HelicorderViewerFrame.rowNum++;
+    Cell cell = row.createCell(HelicorderViewerFrame.cellNum);
+    cell.setCellValue(frequency);
+    
+    try {
+      HelicorderViewerFrame.workbook.write(HelicorderViewerFrame.out);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    try {
+      HelicorderViewerFrame.out.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
     return array;
     
     

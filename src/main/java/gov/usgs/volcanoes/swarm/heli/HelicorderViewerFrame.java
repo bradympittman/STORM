@@ -53,6 +53,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -177,9 +178,19 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
   private SeismicDataSourceListener dataListener;
 
-  private File groundTruthFile;
+  public File groundTruthFile;
 
-  private String dateString;
+  public String dateString;
+
+  public static XSSFWorkbook workbook;
+
+  public static int rowNum;
+
+  public static int cellNum;
+
+  public static XSSFSheet sheet;
+
+  public static FileOutputStream out;
 
   /**
    * Constructor with configuration file as parameter.
@@ -244,6 +255,18 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
    * Create helicorder view panel user interface.
    */
   public void createUi() {
+    System.out.println("creating UI");
+    workbook = new XSSFWorkbook();
+    rowNum = 0;
+    cellNum = 0;
+    sheet = workbook.createSheet("Frequency Data");
+    try {
+      out = new FileOutputStream(new File("FrequencyValues.xlsx"));
+      System.out.println("made");
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     mainPanel = new JPanel(new BorderLayout());
     createHeliPanel();
     createToolBar();
