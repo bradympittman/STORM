@@ -268,7 +268,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     
     List<String> channels = this.getDataSource().getChannels();
     sheet = workbook.createSheet("Frequency Data");
-    excelFilePath = new File("C:Frequencies.xlsx");
+    excelFilePath = new File("Frequencies.xlsx");
     
     XSSFWorkbook workbookFreq = new XSSFWorkbook();
 
