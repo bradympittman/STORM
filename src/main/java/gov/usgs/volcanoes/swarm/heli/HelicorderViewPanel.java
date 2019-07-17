@@ -1215,12 +1215,12 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     Cell cell = row.createCell(HelicorderViewerFrame.cellNum);
     cell.setCellValue(frequency);
     
-    try {
-      HelicorderViewerFrame.workbook.write(HelicorderViewerFrame.out);
-    } catch (IOException e) {
+    //try {
+      //HelicorderViewerFrame.workbook.write(HelicorderViewerFrame.out);
+    //} catch (IOException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+      //e.printStackTrace();
+    //}
     try {
       HelicorderViewerFrame.out.close();
     } catch (IOException e) {
