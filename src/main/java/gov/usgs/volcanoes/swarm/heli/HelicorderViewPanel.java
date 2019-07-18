@@ -1098,7 +1098,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
 
     public void keyPressed(KeyEvent e) {
       if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-        System.out.println(savedStatus);
+//        System.out.println(savedStatus);
         showSavedStausBox(savedStatus);
         
       }
@@ -1217,18 +1217,15 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     for (String str: array) {
       newStatus += str + "\n";
     }
-    System.out.println("\n\nHERE\n" + newStatus);
+//    System.out.println("\n\nHERE\n" + newStatus);
 
     int beginIndex = newStatus.indexOf("Frequency");
     String frequency = newStatus.substring(beginIndex);
-    System.out.println("frequency " + frequency);
-
+    
     Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
     row.createCell(0).setCellValue(frequency);
     HelicorderViewerFrame.rowNum++;
-    System.out.println("row num " + HelicorderViewerFrame.rowNum);
 
-    
     askAddToSpreadsheet(newStatus);
     
     
@@ -1248,20 +1245,15 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       frequency = newStatus.substring(beginIndex);
       int beginDateIndex = beginIndex - 31;
       date = newStatus.substring(beginDateIndex, beginIndex);
-      System.out.println("date " + date);
+
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
       int beginPowerIndex = newStatus.indexOf("Power");
       power = newStatus.substring(beginPowerIndex);
       frequency = newStatus.substring(beginIndex, beginPowerIndex);
-    }
-    
-    System.out.println("frequency " + frequency);
-    System.out.println("power " + power);
-    System.out.println("date " + date);
 
-//    System.out.println(HelicorderViewerFrame.excelFilePath);
+    String channel = settings.channel;
     
     try {
         FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
@@ -1276,16 +1268,20 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
         
         if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
         {
-          Cell cell = row.createCell(0);
+          Cell cellChannel = row.createCell(0);
+          cellChannel.setCellValue(channel);
+          Cell cell = row.createCell(1);
           cell.setCellValue(date);
-          Cell cell2 = row.createCell(1);
+          Cell cell2 = row.createCell(2);
           cell2.setCellValue(frequency);
         }
         else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
         {
-          Cell cell = row.createCell(0);
+          Cell cellChannel = row.createCell(0);
+          cellChannel.setCellValue(channel);
+          Cell cell = row.createCell(1);
           cell.setCellValue(power);
-          Cell cell2 = row.createCell(1);
+          Cell cell2 = row.createCell(2);
           cell2.setCellValue(frequency);
         }
         
@@ -1297,13 +1293,14 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
         workbook.close();
         outputStream.close();
          
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } 
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } 
     
-  }
+    }
   
+  }  
   //end my code
-
+  
 }

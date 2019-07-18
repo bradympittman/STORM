@@ -40,6 +40,7 @@ import gov.usgs.volcanoes.swarm.wave.WaveViewSettingsToolbar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -79,7 +80,9 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -154,10 +157,10 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   protected int autoScaleSliderButtonState;
   protected JSlider autoScaleSlider;
 
-  private HelicorderViewPanel helicorderViewPanel;
+  private static HelicorderViewPanel helicorderViewPanel;
 
   private final WaveViewSettings waveViewSettings;
-  private final HelicorderViewerSettings settings;
+  private static HelicorderViewerSettings settings;
   
   private HelicorderViewerFrame instance;
 
@@ -266,13 +269,11 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
    * Create helicorder view panel user interface.
    */
   public void createUi() {
-    System.out.println("creating UI");
     workbook = new XSSFWorkbook();
     
     if (SwarmInternalFrames.heliOpened == 0)
     {
       rowNum = 0;
-      System.out.println("heli zero");
       
       sheet = workbook.createSheet("Frequency Data");
       excelFilePath = new File("Frequencies.xlsx");
@@ -311,8 +312,6 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     setContentPane(mainPanel);
     
     SwarmInternalFrames.heliOpened++;
-    
-    System.out.println(SwarmInternalFrames.heliOpened);
 
   }
 
@@ -681,10 +680,27 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
           int reply = JOptionPane.showConfirmDialog(new JInternalFrame(), "Would you like to save the current frequencies/powers excel file?", "Saving",  JOptionPane.YES_NO_OPTION);
           if (reply == JOptionPane.YES_OPTION)
           {
-            JInternalFrame newPanel = new JInternalFrame("Saving Frequencies/Powers", true, true, true, true);
-            newPanel.setVisible(true);
-            newPanel.setSize(250, 175);
-            SwarmInternalFrames.add(newPanel);
+
+            String inputValue = JOptionPane.showInputDialog(new JInternalFrame(), 
+                "Enter a name for the excel file (minus the file extension):", "Save As", JOptionPane.QUESTION_MESSAGE);
+            
+            String saveAsValue = inputValue + ".xlsx";
+
+            try {
+              FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
+
+              Workbook workbook = WorkbookFactory.create(inputStream);
+
+              FileOutputStream outputStream = new FileOutputStream(saveAsValue);
+              workbook.write(outputStream);
+              workbook.close();
+              outputStream.close();
+               
+            } catch (IOException e1) {
+              // TODO Auto-generated catch block
+              e1.printStackTrace();
+            } 
+            
           }
         }
         
@@ -779,7 +795,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     dataSource.addListener(dataListener);
   }
 
-  public HelicorderViewPanel getHelicorderViewPanel() {
+  public static HelicorderViewPanel getHelicorderViewPanel() {
     return helicorderViewPanel;
   }
 
@@ -931,7 +947,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     return waveViewSettings;
   }
 
-  public HelicorderViewerSettings getHelicorderViewerSettings() {
+  public static HelicorderViewerSettings getHelicorderViewerSettings() {
     return settings;
   }
 
@@ -988,6 +1004,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
           }
           
           channelHeli = settings.channel;
+//          System.out.println("channel Heli " + channelHeli);
 
           if (!HelicorderViewerFrame.this.isClosed) {
             hd = dataSource.getHelicorder(settings.channel.replace(' ', '$'), before - tc, end + tc,
