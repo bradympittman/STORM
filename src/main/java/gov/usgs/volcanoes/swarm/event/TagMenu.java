@@ -1,8 +1,8 @@
 package gov.usgs.volcanoes.swarm.event;
 
+import gov.usgs.volcanoes.core.Version;
 import gov.usgs.volcanoes.swarm.Swarm;
 import gov.usgs.volcanoes.swarm.SwarmConfig;
-import gov.usgs.volcanoes.swarm.Version;
 import gov.usgs.volcanoes.swarm.heli.HelicorderViewPanel;
 import gov.usgs.volcanoes.swarm.wave.WaveViewPanel;
 

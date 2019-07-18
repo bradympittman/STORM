@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.FormLayout;
 
+import gov.usgs.volcanoes.core.Version;
 import gov.usgs.volcanoes.core.contrib.hypo71.Hypo71;
 import gov.usgs.volcanoes.core.contrib.hypo71.Hypocenter;
 import gov.usgs.volcanoes.core.contrib.hypo71.PhaseRecord;
@@ -26,7 +27,6 @@ import gov.usgs.volcanoes.swarm.Metadata;
 import gov.usgs.volcanoes.swarm.Swarm;
 import gov.usgs.volcanoes.swarm.SwarmConfig;
 import gov.usgs.volcanoes.swarm.SwarmFrame;
-import gov.usgs.volcanoes.swarm.Version;
 import gov.usgs.volcanoes.swarm.event.hypo71.Hypo71Manager;
 import gov.usgs.volcanoes.swarm.event.hypo71.Hypo71SettingsDialog;
 import gov.usgs.volcanoes.swarm.internalFrame.SwarmInternalFrames;
