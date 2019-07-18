@@ -1550,6 +1550,7 @@ public class WaveViewPanel extends JComponent {
     if (t == null) {
       return;
     }
+
     double x = (cursorMark - t[1]) / t[0];
     g2.setColor(DARK_RED);
     g2.draw(new Line2D.Double(x, yOffset + 1, x, getHeight() - bottomHeight - 1));

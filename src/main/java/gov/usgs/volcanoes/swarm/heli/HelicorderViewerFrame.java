@@ -72,6 +72,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -94,9 +96,11 @@ import javax.swing.event.InternalFrameEvent;
 
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.commons.math3.util.Pair;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 
@@ -264,27 +268,32 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   public void createUi() {
     System.out.println("creating UI");
     workbook = new XSSFWorkbook();
-    rowNum = 0;
     
-    List<String> channels = this.getDataSource().getChannels();
-    sheet = workbook.createSheet("Frequency Data");
-    excelFilePath = new File("Frequencies.xlsx");
-    
-    XSSFWorkbook workbookFreq = new XSSFWorkbook();
+    if (SwarmInternalFrames.heliOpened == 0)
+    {
+      rowNum = 0;
+      System.out.println("heli zero");
+      
+      sheet = workbook.createSheet("Frequency Data");
+      excelFilePath = new File("Frequencies.xlsx");
+      
+      XSSFWorkbook workbookFreq = new XSSFWorkbook();
 
-    //Create file system using specific name
-    FileOutputStream out;
-    try {
-      sheet = workbookFreq.createSheet("Frequency Data");
-      out = new FileOutputStream(excelFilePath);
-      workbookFreq.write(out);
-      out.close();
-    } catch (FileNotFoundException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      //Create file system using specific name
+      FileOutputStream out;
+      try {
+        sheet = workbookFreq.createSheet("Frequency Data");
+        out = new FileOutputStream(excelFilePath);
+        workbookFreq.write(out);
+        out.close();
+        
+      } catch (FileNotFoundException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
     //write operation workbook using file out object
@@ -300,6 +309,10 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     setSize(800, 750);
     setContentPane(mainPanel);
+    
+    SwarmInternalFrames.heliOpened++;
+    
+    System.out.println(SwarmInternalFrames.heliOpened);
 
   }
 
@@ -650,6 +663,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 
       @Override
       public void internalFrameClosing(final InternalFrameEvent e) {
+        
         dispose();
         throbber.close();
         refreshThread.kill();
@@ -659,20 +673,27 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
             helicorderViewPanel.getEndTime(), gulperListener);
         dataSource.close();
         
-//        FileOutputStream output_file = 
-//        try {
-//          out = new FileOutputStream(new File("Frequency.xlsx"));
-//        } catch (FileNotFoundException e2) {
-//          // TODO Auto-generated catch block
-//          e2.printStackTrace();
-//        }
-       
-        try {
-          outFreq.close();
-        } catch (IOException e3) {
-          // TODO Auto-generated catch block
-          e3.printStackTrace();
+        
+        if (rowNum > 0)  //data has been added into the excel file
+        {
+          JOptionPane option = new JOptionPane();
+          
+          int reply = JOptionPane.showConfirmDialog(new JInternalFrame(), "Would you like to save the current frequencies/powers excel file?", "Saving",  JOptionPane.YES_NO_OPTION);
+          if (reply == JOptionPane.YES_OPTION)
+          {
+            JInternalFrame newPanel = new JInternalFrame("Saving Frequencies/Powers", true, true, true, true);
+            newPanel.setVisible(true);
+            newPanel.setSize(250, 175);
+            SwarmInternalFrames.add(newPanel);
+          }
         }
+        
+        SwarmInternalFrames.heliOpened--;
+        if (SwarmInternalFrames.heliOpened == 0)
+        {
+          excelFilePath.delete();
+        }
+
       }
 
       @Override

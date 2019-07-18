@@ -24,6 +24,8 @@ public final class SwarmInternalFrames {
 
   private static final EventListenerList internalFrameListeners = new EventListenerList();
   private static final ArrayList<JInternalFrame> internalFrames = new ArrayList<JInternalFrame>();
+  
+  public static int heliOpened;
 
   private SwarmInternalFrames() {}
 

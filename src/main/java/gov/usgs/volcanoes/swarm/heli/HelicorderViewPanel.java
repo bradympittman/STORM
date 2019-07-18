@@ -1218,41 +1218,16 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       newStatus += str + "\n";
     }
     System.out.println("\n\nHERE\n" + newStatus);
-    
-//    for (int i = 0; i < newStatus.length(); i++)
-//    {
-//      System.out.println(i + newStatus.);
-//    }
-//   
+
     int beginIndex = newStatus.indexOf("Frequency");
-//    System.out.println(beginIndex);
-//    System.out.println(newStatus.substring(beginIndex));
     String frequency = newStatus.substring(beginIndex);
     System.out.println("frequency " + frequency);
-    
-//    Row row = HelicorderViewerFrame.sheet.getRow(HelicorderViewerFrame.rowNum);
-//    row.createCell(0).setCellValue(frequency);
-//    HelicorderViewerFrame.sheet.getRow(0).getCell(0).setCellValue(frequency);
-    
-    
-//    XSSFSheet sheet = HelicorderViewerFrame.workbook.getSheetAt(0);
-//    System.out.println(sheet.getSheetName());
-//    System.out.println("sheet " + sheet);
+
     Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
     row.createCell(0).setCellValue(frequency);
     HelicorderViewerFrame.rowNum++;
     System.out.println("row num " + HelicorderViewerFrame.rowNum);
 
-
-
-//    
-//    Row row = HelicorderViewerFrame.sheet.createRow(0);
-//    HelicorderViewerFrame.rowNum++;
-//    row.createCell(0).setCellValue(frequency);
-//    row.createCell(1).setCellValue(frequency);
-//    Cell cell = row.createCell(0);
-//    cell.setCellValue(frequency);
-//    HelicorderViewerFrame.cellNum++;
     
     askAddToSpreadsheet(newStatus);
     
@@ -1264,28 +1239,33 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   public void askAddToSpreadsheet(String newStatus)
   {
     int beginIndex = newStatus.indexOf("Frequency");
-    String frequency = newStatus.substring(beginIndex);
-    
+    String frequency = null;
+    String power = null;
     String date = null;
     
     if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
     {
+      frequency = newStatus.substring(beginIndex);
       int beginDateIndex = beginIndex - 31;
       date = newStatus.substring(beginDateIndex, beginIndex);
       System.out.println("date " + date);
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
-      
+      int beginPowerIndex = newStatus.indexOf("Power");
+      power = newStatus.substring(beginPowerIndex);
+      frequency = newStatus.substring(beginIndex, beginPowerIndex);
     }
     
-//    String excelFilePath = HelicorderViewerFrame.outFile.getName();
-    System.out.println(HelicorderViewerFrame.excelFilePath);
+    System.out.println("frequency " + frequency);
+    System.out.println("power " + power);
+    System.out.println("date " + date);
+
+//    System.out.println(HelicorderViewerFrame.excelFilePath);
     
     try {
         FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
-//        System.out.println(new File(excelFilePath));
-//        System.out.println(inputStream);
+
         Workbook workbook = WorkbookFactory.create(inputStream);
         System.out.println(workbook);
 
@@ -1293,11 +1273,22 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
         int rowCount = sheet.getLastRowNum();
         System.out.println("rowcount " + HelicorderViewerFrame.rowNum);
         Row row = sheet.createRow(HelicorderViewerFrame.rowNum - 1);
-//        HelicorderViewerFrame.rowNum++;
-        Cell cell = row.createCell(0);
-        cell.setCellValue(date);
-        Cell cell2 = row.createCell(1);
-        cell2.setCellValue(frequency);
+        
+        if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
+        {
+          Cell cell = row.createCell(0);
+          cell.setCellValue(date);
+          Cell cell2 = row.createCell(1);
+          cell2.setCellValue(frequency);
+        }
+        else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
+        {
+          Cell cell = row.createCell(0);
+          cell.setCellValue(power);
+          Cell cell2 = row.createCell(1);
+          cell2.setCellValue(frequency);
+        }
+        
 
         inputStream.close();
 
