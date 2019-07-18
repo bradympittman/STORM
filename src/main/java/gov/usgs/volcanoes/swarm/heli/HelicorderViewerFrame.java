@@ -274,7 +274,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     if (SwarmInternalFrames.heliOpened == 0)
     {
       rowNum = 0;
-      
+
       sheet = workbook.createSheet("Frequency Data");
       excelFilePath = new File("Frequencies.xlsx");
       
@@ -690,7 +690,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
               FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
 
               Workbook workbook = WorkbookFactory.create(inputStream);
-
+              
               FileOutputStream outputStream = new FileOutputStream(saveAsValue);
               workbook.write(outputStream);
               workbook.close();
