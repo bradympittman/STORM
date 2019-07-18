@@ -145,7 +145,8 @@ public class WaveViewPanel extends JComponent {
   private double dataStart;
   //end added
   
-  
+  public int spectraX;
+  public int spectraY;
   
   /**
    * Default constructor.
@@ -642,10 +643,18 @@ public class WaveViewPanel extends JComponent {
     Dimension size = getSize();
     double[] t = getTranslation();
     time = Double.NaN;
+    
+    
+    if (WaveViewSettings.viewType == ViewType.SPECTRA)
+    {
+      spectraX = x;
+      spectraY = y;
+    }
 
     if (wave != null && t != null && y > yOffset && y < (size.height - bottomHeight) && x > xOffset
         && x < size.width - rightWidth) {
       time = x * t[0] + t[1];
+//      System.out.println("time " + time);
       double yi = y * -t[2] + t[3];
 
       status.append(StatusTextArea.getWaveInfo(wave));
@@ -1542,6 +1551,13 @@ public class WaveViewPanel extends JComponent {
   }
 
   private void paintCursor(Graphics2D g2) {
+    
+    if (WaveViewSettings.viewType == ViewType.SPECTRA)
+    {
+      g2.setColor(DARK_RED);
+      g2.draw(new Line2D.Double(spectraX, 21, spectraX, 146));
+    }
+    
     if (Double.isNaN(cursorMark) || cursorMark < startTime || cursorMark > endTime) {
       return;
     }
