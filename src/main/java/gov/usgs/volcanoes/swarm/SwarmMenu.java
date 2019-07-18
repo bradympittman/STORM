@@ -13,6 +13,7 @@ import gov.usgs.volcanoes.swarm.map.MapFrame;
 import gov.usgs.volcanoes.swarm.wave.WaveClipboardFrame;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,6 +89,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
   //added
   private JMenuItem buttonLegend;
   private ButtonLegendDialog buttonLegendDialog;
+  private JMenuItem manualItem;
   //end added
 
   private Map<JInternalFrame, InternalFrameMenuItem> windows;
@@ -484,6 +486,33 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
         buttonLegendDialog.setVisible(true);
       }
     });
+    
+    manualItem = new JMenuItem("Open Manual");
+    manualItem.setMnemonic('O');
+    manualItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        File file = new File("src/main/resources/help/swarm_v2.pdf");
+        try{
+
+          if (file.exists()) {
+
+            if (Desktop.isDesktopSupported()) {
+              Desktop.getDesktop().open(file);
+              } else {
+                System.out.println("Deskton not supported");
+              }
+
+          } else {
+
+              System.out.println("File does not exist");
+
+          }
+
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
     //end added
     
     
@@ -491,6 +520,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
     helpMenu.add(about);
     //added
     helpMenu.add(buttonLegend);
+    helpMenu.add(manualItem);
     //end added
     add(helpMenu);
   }
