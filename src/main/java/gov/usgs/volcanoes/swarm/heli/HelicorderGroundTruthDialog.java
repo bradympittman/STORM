@@ -1,6 +1,8 @@
 package gov.usgs.volcanoes.swarm.heli;
 
+import gov.usgs.volcanoes.swarm.SwarmFrame;
 import gov.usgs.volcanoes.swarm.SwarmModalDialog;
+import gov.usgs.volcanoes.swarm.internalFrame.SwarmInternalFrames;
 import gov.usgs.volcanoes.swarm.wave.WaveViewSettings;
 import gov.usgs.volcanoes.swarm.wave.WaveViewSettingsDialog;
 
@@ -18,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.math3.util.Pair;
 
-public class HelicorderGroundTruthDialog extends SwarmModalDialog implements ListSelectionListener{
+public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelectionListener{
   
   private static final long serialVersionUID = 1L;
   private static HelicorderGroundTruthDialog dialog;
@@ -28,14 +30,16 @@ public class HelicorderGroundTruthDialog extends SwarmModalDialog implements Lis
   private HelicorderViewerFrame hvf;
   
   private HelicorderGroundTruthDialog(HelicorderViewerFrame hvf, ArrayList<Pair<Date, Date>> array) {
-    super(applicationFrame, "Ground Truth");
+    
+    super("Ground Truth",true,true,true,true);
+    System.out.println("Ahhhhhh");
     this.hvf = hvf;
-    createUi();
     this.array = array;
     add(array);
-    setSizeAndLocation();
+    setSize(500,500);
+    setOpaque(true);
     setVisible(true);
-    this.hvf = hvf;
+    SwarmInternalFrames.add(this);
   }
   
   /**
