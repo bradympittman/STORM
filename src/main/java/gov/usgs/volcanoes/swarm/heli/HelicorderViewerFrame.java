@@ -205,6 +205,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   public static File outFile;
   
   public static String channelHeli;
+  
+  public static Boolean firstGroundOpening;
 
   /**
    * Constructor with configuration file as parameter.
@@ -312,6 +314,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     setContentPane(mainPanel);
     
     SwarmInternalFrames.heliOpened++;
+    firstGroundOpening = true;
 
   }
 
@@ -1435,9 +1438,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
         if (endTime != "")
         {
-//          System.out.println("start time " + javaStartDate);
-//          System.out.println("end time " + javaEndDate);
-          
+
           dates.add(new Pair<Date, Date>(javaStartDate, javaEndDate));
           //createCustomWaveInset(javaStartDate, javaEndDate);
   
@@ -1445,7 +1446,11 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
     }
     HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
-//    d.setVisible(true);
+    if (firstGroundOpening != true)
+    {
+      d.setVisible(true);
+    }
+    firstGroundOpening = false;
     file.close();
   
   }
