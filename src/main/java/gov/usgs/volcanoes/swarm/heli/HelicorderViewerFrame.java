@@ -141,7 +141,6 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   private JButton backButton;
   private JButton forwardButton;
   private JButton groundTruthButton;
-  private JButton testButton;
   private JButton compX;
   private JButton expX;
   private JButton compY;
@@ -574,26 +573,6 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     toolBar.add(groundTruthButton);
     
      
-    testButton = SwarmUtil.createToolBarButton(Icons.earth,
-        "TEST", new ActionListener() {
-          public void actionPerformed(final ActionEvent e) {
-            
-            //settings.setBottomTime(6.158521530139104E8);
-            //getHelicorder();
-            
-            //System.out.print(Ew.toDateString(6.155305706336939E8) + "\n\n");
-            //helicorderViewPanel.createWaveInset(6.158521530139104E8,0,0);
-            
-            //HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(instance);
-            //HelicorderViewerSettingsDialog d = HelicorderViewerSettingsDialog.getInstance(settings, waveViewSettings);
-            //d.setVisible(true);
-            
-            
-            JDialog d = new JDialog();
-            d.isVisible();
-            }
-        });
-    toolBar.add(testButton);
     
     //End addition
     
