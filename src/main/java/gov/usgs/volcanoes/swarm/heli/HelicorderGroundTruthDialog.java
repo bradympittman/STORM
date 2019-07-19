@@ -41,7 +41,7 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
     setVisible(true);
     SwarmInternalFrames.add(this);
   }
-  
+   
   /**
    * Get instance of wave view settings dialog.
    * @param s wave view settings
