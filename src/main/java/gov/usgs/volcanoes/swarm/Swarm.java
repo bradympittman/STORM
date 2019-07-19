@@ -38,6 +38,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -55,7 +56,7 @@ import javax.swing.UIManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.net.URLClassLoader;
 /**
  * The main UI and application class for Swarm. Only functions directly pertaining to the UI and
  * overall application operation belong here.
@@ -103,7 +104,12 @@ public class Swarm extends JFrame implements InternalFrameListener {
     LOGGER.info("Swarm version/date: " + Version.VERSION_STRING);
     application = this;
     applicationFrame = this;
+    System.out.println("GOT\nHERE!");
+    
+    System.out.print(System.getProperty("java.class.path"));
+    
     setIconImage(Icons.swarm.getImage());
+    System.out.println("SUCCESS!");
 
     config = SwarmConfig.getInstance();
     config.createConfig(args);

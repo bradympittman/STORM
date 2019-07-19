@@ -100,8 +100,11 @@ public class Icons {
   public static final ImageIcon buttonLegend = getIcon("images/buttonLegend.png");
   
 
+  
+  
   private static ImageIcon getIcon(String key) {
-    return new ImageIcon(ClassLoader.getSystemResource(key));
+    //System.out.println(ClassLoader.getSystemResource(key));
+    return new ImageIcon("target/classes/" + key);
   }
   
   

@@ -90,6 +90,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
   private JMenuItem buttonLegend;
   private ButtonLegendDialog buttonLegendDialog;
   private JMenuItem manualItem;
+  private JMenuItem tutorialItem;
   //end added
 
   private Map<JInternalFrame, InternalFrameMenuItem> windows;
@@ -488,7 +489,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
     });
     
     manualItem = new JMenuItem("Open Manual");
-    manualItem.setMnemonic('O');
+    manualItem.setMnemonic('M');
     manualItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         File file = new File("src/main/resources/help/swarm_v2.pdf");
@@ -499,7 +500,34 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
             if (Desktop.isDesktopSupported()) {
               Desktop.getDesktop().open(file);
               } else {
-                System.out.println("Deskton not supported");
+                System.out.println("Desktop not supported");
+              }
+
+          } else {
+
+              System.out.println("File does not exist");
+
+          }
+
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+    
+    tutorialItem = new JMenuItem("Open BAH Tutorial");
+    tutorialItem.setMnemonic('T');
+    tutorialItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        File file = new File("src/main/resources/help/Swarm_Tutorial.pdf");
+        try{
+
+          if (file.exists()) {
+
+            if (Desktop.isDesktopSupported()) {
+              Desktop.getDesktop().open(file);
+              } else {
+                System.out.println("Desktop not supported");
               }
 
           } else {
@@ -521,6 +549,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
     //added
     helpMenu.add(buttonLegend);
     helpMenu.add(manualItem);
+    helpMenu.add(tutorialItem);
     //end added
     add(helpMenu);
   }

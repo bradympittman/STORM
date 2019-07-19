@@ -11,9 +11,9 @@ import java.util.ResourceBundle;
  */
 public class Messages
 {
-	private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+	//private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, Locale.ENGLISH);
+	//private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, Locale.ENGLISH);
 
 	private Messages()
 	{
@@ -24,10 +24,11 @@ public class Messages
 		// TODO Auto-generated method stub
 		try
 		{
-			return RESOURCE_BUNDLE.getString(key);
+			//return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e)
 		{
-			return '!' + key + '!';
+			//return '!' + key + '!';
 		}
+		return key;
 	}
 }

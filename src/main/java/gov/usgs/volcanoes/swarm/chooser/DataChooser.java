@@ -102,7 +102,7 @@ public class DataChooser extends JPanel {
   public static final int OK = 0;
   private static final long serialVersionUID = 1L;
   private static final String OPENING_MESSAGE = 
-      Messages.getString("DataChooser.treeOpening"); //$NON-NLS-1$
+      Messages.getString("Opening"); //$NON-NLS-1$
 
   private static final String[] TIME_VALUES = new String[] {"Now"}; // "Today (Local)",
                                                                     // "Today (UTC)",
@@ -1057,7 +1057,7 @@ public class DataChooser extends JPanel {
     HashMap<String, GroupNode> groupMap = new HashMap<String, GroupNode>();
     HashSet<GroupNode> openGroups = new HashSet<GroupNode>();
 
-    GroupNode allNode = new GroupNode(Messages.getString("DataChooser.allGroup")); //$NON-NLS-1$
+    GroupNode allNode = new GroupNode(Messages.getString("All")); //$NON-NLS-1$
     AbstractChooserNode rootNode = node;
     if (!saveProgress) {
       rootNode.removeAllChildren();
