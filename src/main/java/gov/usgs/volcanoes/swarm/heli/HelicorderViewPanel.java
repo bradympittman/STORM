@@ -386,6 +386,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           TagMenu tagMenu = getTagMenu();
           tagMenu.setJ2k(j2k);
           tagMenu.show(HelicorderViewPanel.this, mx, my);
+
         } 
       }
       /*
@@ -474,6 +475,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           }
           if (showTag != null) {
             status += "\n" + showTag.getTimeString() + " - " + showTag.classification;
+
           }
         }
         savedStatus = status;
@@ -910,6 +912,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
    * @param color color
    */
   private void drawEvent(Graphics2D g2, double t, Color color) {
+
     if (Double.isNaN(t)) {
       return;
     }
@@ -939,6 +942,12 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     } else if (displayImage != null) {
       g2.drawImage(displayImage, 0, 0, null);
     }
+    
+//    for (int i = 0; i < Thread.currentThread().getStackTrace().length; i++)
+//    {
+//      System.out.println(Thread.currentThread().getStackTrace());
+//    }
+//    
 
     drawMark(g2, startMark, DARK_GREEN);
     drawMark(g2, endMark, DARK_GREEN);

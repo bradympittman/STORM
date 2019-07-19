@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.text.ParseException;
 import java.util.Comparator;
 
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+
 public class TagData implements Comparator<TagData> {
   
   public String channel;
@@ -39,7 +42,17 @@ public class TagData implements Comparator<TagData> {
   public TagData(String channel, double startTime, String classification) {
     this.channel = channel;
     this.startTime = startTime;
-    this.classification = classification;
+    if (classification.compareTo("Other") == 0)
+    {
+      String newClassification = JOptionPane.showInputDialog(new JInternalFrame(), 
+          "What would you like to name the event?", "New Classification", JOptionPane.QUESTION_MESSAGE);
+      this.classification = newClassification;
+    }
+    else
+    {
+      this.classification = classification;
+    }
+    
     setColor();
 
   }

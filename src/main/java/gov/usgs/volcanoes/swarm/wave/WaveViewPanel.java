@@ -146,7 +146,8 @@ public class WaveViewPanel extends JComponent {
   //end added
   
   public int spectraX;
-  public int spectraY;
+  public int spectraYbegin;
+  public int spectraYend;
   
   /**
    * Default constructor.
@@ -648,7 +649,15 @@ public class WaveViewPanel extends JComponent {
     if (WaveViewSettings.viewType == ViewType.SPECTRA)
     {
       spectraX = x;
-      spectraY = y;
+      spectraYbegin = yOffset;
+      if (yOffset == 20)
+      {
+        spectraYend = 146;
+      }
+      else if (yOffset == 8)
+      {
+        spectraYend = 96;
+      }
     }
 
     if (wave != null && t != null && y > yOffset && y < (size.height - bottomHeight) && x > xOffset
@@ -1555,7 +1564,7 @@ public class WaveViewPanel extends JComponent {
     if (WaveViewSettings.viewType == ViewType.SPECTRA)
     {
       g2.setColor(DARK_RED);
-      g2.draw(new Line2D.Double(spectraX, 21, spectraX, 146));
+      g2.draw(new Line2D.Double(spectraX, spectraYbegin, spectraX, spectraYend));
     }
     
     if (Double.isNaN(cursorMark) || cursorMark < startTime || cursorMark > endTime) {
