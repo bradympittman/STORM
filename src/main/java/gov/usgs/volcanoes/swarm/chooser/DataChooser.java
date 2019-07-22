@@ -302,7 +302,7 @@ public class DataChooser extends JPanel {
     toolBar = SwarmUtil.createToolBar();
 
     newButton = SwarmUtil.createToolBarButton(Icons.new_server, // $NON-NLS-1$
-        Messages.getString("DataChooser.newSourceToolTip"), //$NON-NLS-1$
+        Messages.getString("NewSource"), //$NON-NLS-1$
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -326,7 +326,7 @@ public class DataChooser extends JPanel {
     toolBar.add(newButton);
 
     editButton = SwarmUtil.createToolBarButton(Icons.edit_server, // $NON-NLS-1$
-        Messages.getString("DataChooser.editSourceToolTip"), //$NON-NLS-1$
+        Messages.getString("editSourceToolTip"), //$NON-NLS-1$
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             List<ServerNode> servers = getSelectedServers();
@@ -362,7 +362,7 @@ public class DataChooser extends JPanel {
     toolBar.add(editButton);
 
     collapseButton = SwarmUtil.createToolBarButton(Icons.collapse, // $NON-NLS-1$
-        Messages.getString("DataChooser.collapseToolTip"), //$NON-NLS-1$
+        Messages.getString("CollapseTool"), //$NON-NLS-1$
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             collapseTree(dataTree);
@@ -387,7 +387,7 @@ public class DataChooser extends JPanel {
     toolBar.add(deleteButton);
 
     refreshButton = SwarmUtil.createToolBarButton(Icons.refresh,
-        Messages.getString("DataChooser.refreshSourceToolTip"), new ActionListener() {
+        Messages.getString("RefreshSourceToolTip"), new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             List<ServerNode> servers = getSelectedServers();
             if (servers != null) {
@@ -478,7 +478,7 @@ public class DataChooser extends JPanel {
 
     heliButton = new JButton(Icons.heli); // $NON-NLS-1$
     heliButton.setFocusable(false);
-    heliButton.setToolTipText(Messages.getString("DataChooser.heliButtonToolTip")); //$NON-NLS-1$
+    heliButton.setToolTipText(Messages.getString("HeliButtonToolTip")); //$NON-NLS-1$
     heliButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         SwingWorker worker = new SwingWorker() {
@@ -521,7 +521,7 @@ public class DataChooser extends JPanel {
     rsamButton = new JButton(Icons.rsam_values); // $NON-NLS-1$
     rsamButton.setFocusable(false);
     rsamButton.setEnabled(false);
-    rsamButton.setToolTipText(Messages.getString("DataChooser.rsamButtonToolTip")); //$NON-NLS-1$
+    rsamButton.setToolTipText(Messages.getString("RsamButtonToolTip")); //$NON-NLS-1$
     rsamButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         SwingWorker worker = new SwingWorker() {
@@ -542,7 +542,7 @@ public class DataChooser extends JPanel {
     clipboardButton = new JButton(Icons.clipboard); // $NON-NLS-1$
     clipboardButton.setFocusable(false);
     clipboardButton.setToolTipText(
-        Messages.getString("DataChooser.clipboardButtonToolTip")); //$NON-NLS-1$
+        Messages.getString("ClipboardButtonToolTip")); //$NON-NLS-1$
     clipboardButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         SwingWorker worker = new SwingWorker() {
@@ -570,7 +570,7 @@ public class DataChooser extends JPanel {
     monitorButton = new JButton(Icons.monitor); // $NON-NLS-1$
     monitorButton.setFocusable(false);
     monitorButton.setToolTipText(
-        Messages.getString("DataChooser.monitorButtonToolTip")); //$NON-NLS-1$
+        Messages.getString("MonitorButtonToolTip")); //$NON-NLS-1$
     monitorButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         SwingWorker worker = new SwingWorker() {
