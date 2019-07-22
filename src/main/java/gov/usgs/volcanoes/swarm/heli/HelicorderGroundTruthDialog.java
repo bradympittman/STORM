@@ -1,12 +1,8 @@
 package gov.usgs.volcanoes.swarm.heli;
 
 import gov.usgs.volcanoes.swarm.SwarmFrame;
-import gov.usgs.volcanoes.swarm.SwarmModalDialog;
 import gov.usgs.volcanoes.swarm.internalFrame.SwarmInternalFrames;
-import gov.usgs.volcanoes.swarm.wave.WaveViewSettings;
-import gov.usgs.volcanoes.swarm.wave.WaveViewSettingsDialog;
 
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +11,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -32,13 +30,13 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
   private HelicorderGroundTruthDialog(HelicorderViewerFrame hvf, ArrayList<Pair<Date, Date>> array) {
     
     super("Ground Truth",true,true,true,true);
-    System.out.println("Ahhhhhh");
     this.hvf = hvf;
     this.array = array;
     add(array);
     setSize(500,500);
     setOpaque(true);
     setVisible(true);
+    addInternalFrameListener(new GroundTruthWindowListener());
     SwarmInternalFrames.add(this);
   }
    
@@ -59,7 +57,6 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
   
   public void add(ArrayList<Pair<Date, Date>> array) {
     JPanel axisPanel = new JPanel(new GridBagLayout());
-    GridBagConstraints c = new GridBagConstraints();
     Object[] arrayList = array.toArray();
     list = new JList<Object>(arrayList);
     list.setVisible(true);
@@ -77,6 +74,49 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
       hvf.createCustomWaveInset(array.get(list.getSelectedIndex()).getFirst(), 
           array.get(list.getSelectedIndex()).getSecond());
     }
+    
+  }
+  
+  private class GroundTruthWindowListener implements InternalFrameListener {
+
+    public void internalFrameOpened(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameClosing(InternalFrameEvent e) {
+      HelicorderViewerFrame.getHelicorderViewPanel().clearMarks();
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameClosed(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameIconified(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameActivated(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void internalFrameDeactivated(InternalFrameEvent e) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    
+    
     
   }
   
