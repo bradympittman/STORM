@@ -10,6 +10,7 @@ import gov.usgs.volcanoes.core.legacy.plot.render.AxisRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.FrameRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.HelicorderRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.TextRenderer;
+import gov.usgs.volcanoes.core.time.Ew;
 import gov.usgs.volcanoes.core.time.J2kSec;
 import gov.usgs.volcanoes.swarm.Icons;
 import gov.usgs.volcanoes.swarm.Metadata;
@@ -556,8 +557,6 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       return;
     }
     
-    
-
     insetY = my;
 
     if (insetWavePanel == null) {

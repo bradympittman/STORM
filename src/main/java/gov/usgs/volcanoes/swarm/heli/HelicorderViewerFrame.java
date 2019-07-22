@@ -1341,8 +1341,9 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
         String startTime = "";
         String endTime = "";
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("EST"));
-//        Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
         cal.set(year, month, day);
         Date javaStartDate = new Date();
         Date javaEndDate = new Date();
@@ -1356,44 +1357,25 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
                 if (rowCount > 1 && columnCount == 5) // start time
                 {
                     Date javaStart = DateUtil.getJavaDate((double)cell.getNumericCellValue());
-//                    SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
-//                    star.setTimeZone(TimeZone.getTimeZone("GMT+02"));
                     startTime = new SimpleDateFormat("HH:mm:ss").format(javaStart);
-                    
-//                    String swarmStartTime = star.format(javaStart);
-//                    
-////  //                    System.out.print(” “);
-//                    int hour = Integer.parsseInt(swarmStartTime.substring(0, 2));
-//                    int min = Integer.parseInt(swarmStartTime.substring(3, 5));
-//                    int sec = Integer.parseInt(swarmStartTime.substring(6));
+
                     int hour = Integer.parseInt(startTime.substring(0, 2));
                     int min = Integer.parseInt(startTime.substring(3, 5));
                     int sec = Integer.parseInt(startTime.substring(6));
                     cal.set(Calendar.HOUR_OF_DAY, hour);
                     cal.set(Calendar.MINUTE, min);
                     cal.set(Calendar.SECOND, sec);
-//
-//                    if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
-//                    {
-//                      cal.add(Calendar.DATE, -1);
-//                    }
-                    
+
+                    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
                     javaStartDate = cal.getTime();
-                    
 
                 }
                 else if (rowCount > 1 && columnCount == 7) // end time
                 {
                   Date javaEnd = DateUtil.getJavaDate((double)cell.getNumericCellValue());
                   SimpleDateFormat end = new SimpleDateFormat("HH:mm:ss");
-//                  end.setTimeZone(TimeZone.getTimeZone("UTC"));
                   endTime = new SimpleDateFormat("HH:mm:ss").format(javaEnd);
-//                  endTime = end.format(javaEnd);
-                  
-////                    System.out.print(” “);
-//                  int hour = Integer.parseInt(swarmEndTime.substring(0, 2));
-//                  int min = Integer.parseInt(swarmEndTime.substring(3, 5));
-//                  int sec = Integer.parseInt(swarmEndTime.substring(6));
+
                   int hour = Integer.parseInt(endTime.substring(0, 2));
                   int min = Integer.parseInt(endTime.substring(3, 5));
                   int sec = Integer.parseInt(endTime.substring(6));
@@ -1401,12 +1383,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
                   cal.set(Calendar.MINUTE, min);
                   cal.set(Calendar.SECOND, sec);
 
-//                  if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
-//                  {
-//                    cal.add(Calendar.DATE, -1);
-//                  }
+                  TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
                   javaEndDate = cal.getTime();
-//                  System.out.println(Ew.fromDate(javaEndDate));
   
                 }
                 break;
@@ -1419,8 +1397,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
         {
 
           dates.add(new Pair<Date, Date>(javaStartDate, javaEndDate));
-          //createCustomWaveInset(javaStartDate, javaEndDate);
-  
+
         }
   
     }
@@ -1447,18 +1424,18 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
       }
     }
     String dateString = filename.substring(0, underIndex - 1);
-    
-//    int year = Integer.parseInt(dateString.substring(0, 4));
+
     int year = 1989;
     int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
     int day = Integer.parseInt(dateString.substring(6));
     
     SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
-    star.setTimeZone(TimeZone.getTimeZone("GMT+02"));
+    star.setTimeZone(TimeZone.getTimeZone("UTC"));
     String startTime = new SimpleDateFormat("HH:mm:ss").format(javaStartDate);
     String swarmStartTime = star.format(javaStartDate);
     
-    Calendar cal = Calendar.getInstance();
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     cal.set(year, month, day);
     
     int hour = Integer.parseInt(swarmStartTime.substring(0, 2));
@@ -1468,15 +1445,16 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     cal.set(Calendar.HOUR_OF_DAY, hour);
     cal.set(Calendar.MINUTE, min);
     cal.set(Calendar.SECOND, sec);
-
-    if (cal.get(Calendar.HOUR_OF_DAY) >= 12)
-    {
-      cal.add(Calendar.DATE, -1);
-    }
+    cal.add(Calendar.HOUR_OF_DAY, -12);
+    
     javaStartDate = cal.getTime();
+
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    cal.set(year, month, day);
     
     SimpleDateFormat end = new SimpleDateFormat("HH:mm:ss");
-    end.setTimeZone(TimeZone.getTimeZone("GMT+02"));
+    end.setTimeZone(TimeZone.getTimeZone("UTC"));
     String endTime = new SimpleDateFormat("HH:mm:ss").format(javaEndDate);
     String swarmEndTime = end.format(javaEndDate);
 
@@ -1487,9 +1465,10 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     cal.set(Calendar.HOUR_OF_DAY, hour);
     cal.set(Calendar.MINUTE, min);
     cal.set(Calendar.SECOND, sec);
-
+    cal.add(Calendar.HOUR_OF_DAY, -12);
+    
     javaEndDate = cal.getTime();
-  
+
     float difference = javaEndDate.getTime() - javaStartDate.getTime();
     difference = difference / 1000;
   
