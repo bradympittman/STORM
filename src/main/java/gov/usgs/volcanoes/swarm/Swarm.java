@@ -75,7 +75,7 @@ public class Swarm extends JFrame implements InternalFrameListener {
   private SwarmMenu swarmMenu;
   private final CachedDataSource cache;
 
-  private static final String TITLE = "Booz Allen Hamilton Swarm";
+  private static final String TITLE = "Booz Allen Hamilton Storm";
 
   private static final int LEFT = 1;
   private static final int RIGHT = 2;
