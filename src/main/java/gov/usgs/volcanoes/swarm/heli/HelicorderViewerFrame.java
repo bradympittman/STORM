@@ -1402,11 +1402,12 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
     }
     HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
-    if (firstGroundOpening != true)
-    {
-      d.setVisible(true);
-    }
-    firstGroundOpening = false;
+//    if (firstGroundOpening != true)
+//    {
+//      d.setVisible(true);
+//    }
+//    firstGroundOpening = false;
+    d.setVisible(true);
     file.close();
   
   }

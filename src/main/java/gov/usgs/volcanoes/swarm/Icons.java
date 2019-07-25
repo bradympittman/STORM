@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
  */
 public class Icons {
   
-  public static final ImageIcon swarm = getIcon("images/swarm.gif");
+  public static final ImageIcon swarm = getIcon("images/STORM.png");
   public static final ImageIcon camera = getIcon("images/camera.gif");
   public static final ImageIcon back = getIcon("images/back.gif");
   public static final ImageIcon geoback = getIcon("images/geoback.gif");
