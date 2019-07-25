@@ -27,9 +27,10 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
   
   private HelicorderViewerFrame hvf;
   
-  private HelicorderGroundTruthDialog(HelicorderViewerFrame hvf, ArrayList<Pair<Date, Date>> array) {
+  public HelicorderGroundTruthDialog(HelicorderViewerFrame hvf, ArrayList<Pair<Date, Date>> array) {
     
     super("Ground Truth",true,true,true,true);
+    
     this.hvf = hvf;
     this.array = array;
     add(array);
@@ -40,20 +41,7 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
     SwarmInternalFrames.add(this);
   }
    
-  /**
-   * Get instance of wave view settings dialog.
-   * @param s wave view settings
-   * @param count settings count
-   * @return wave view settings dialog
-   */
-  public static HelicorderGroundTruthDialog getInstance(HelicorderViewerFrame hvf, ArrayList<Pair<Date, Date>> array) {
-    if (dialog == null) {
-      
-      dialog = new HelicorderGroundTruthDialog(hvf, array);
-    }
-    
-    return dialog;
-  }
+
   
   public void add(ArrayList<Pair<Date, Date>> array) {
     JPanel axisPanel = new JPanel(new GridBagLayout());

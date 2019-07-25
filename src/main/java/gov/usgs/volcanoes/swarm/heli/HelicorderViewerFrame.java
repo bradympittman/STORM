@@ -1305,6 +1305,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   //Add Megans code
   
   public void acceptGroundTruth(File fs) throws IOException {
+    
 
 //  File myFile = new File(“20190305__Run Logs-20190305.xlsx”);
     FileInputStream file = new FileInputStream(fs);
@@ -1412,7 +1413,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
         }
   
     }
-    HelicorderGroundTruthDialog d = HelicorderGroundTruthDialog.getInstance(this, dates);
+    HelicorderGroundTruthDialog d = new HelicorderGroundTruthDialog(this, dates);
 //    if (firstGroundOpening != true)
 //    {
 //      d.setVisible(true);
@@ -1420,6 +1421,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
 //    firstGroundOpening = false;
     d.setVisible(true);
     file.close();
+    
   
   }
 
