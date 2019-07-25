@@ -519,7 +519,7 @@ public class SwarmMenu extends JMenuBar implements InternalFrameListener {
     tutorialItem.setMnemonic('T');
     tutorialItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        File file = new File("src/main/resources/help/Swarm_Tutorial.pdf");
+        File file = new File("src/main/resources/help/Storm_Tutorial.pdf");
         try{
 
           if (file.exists()) {

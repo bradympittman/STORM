@@ -101,10 +101,10 @@ public class Icons {
   
 
   
-  
+   
   private static ImageIcon getIcon(String key) {
     //System.out.println(ClassLoader.getSystemResource(key));
-    return new ImageIcon("target/classes/" + key);
+    return new ImageIcon("src/main/resources/" + key);
   }
   
   
