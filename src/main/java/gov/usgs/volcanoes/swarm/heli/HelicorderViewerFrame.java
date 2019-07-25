@@ -1333,6 +1333,8 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     Iterator<Row> rowIterator = sheet.iterator();
     int rowCount = 0;
     int columnCount = 0;
+    int startColumn = 0;
+    int endColumn = 0;
     while (rowIterator.hasNext())
     {
         columnCount = 0;
@@ -1351,10 +1353,19 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
         while (cellIterator.hasNext())
         {
             Cell cell = cellIterator.next();
+            if (cell.toString().contains("Start"))
+            {
+              startColumn = columnCount;
+            }
+            else if (cell.toString().contains("End"))
+            {
+              endColumn = columnCount;
+            }
+            
             switch (cell.getCellType())
             {
             case NUMERIC:
-                if (rowCount > 1 && columnCount == 5) // start time
+                if (rowCount > 1 && columnCount == startColumn) // start time
                 {
                     Date javaStart = DateUtil.getJavaDate((double)cell.getNumericCellValue());
                     startTime = new SimpleDateFormat("HH:mm:ss").format(javaStart);
@@ -1370,7 +1381,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
                     javaStartDate = cal.getTime();
 
                 }
-                else if (rowCount > 1 && columnCount == 7) // end time
+                else if (rowCount > 1 && columnCount == endColumn) // end time
                 {
                   Date javaEnd = DateUtil.getJavaDate((double)cell.getNumericCellValue());
                   SimpleDateFormat end = new SimpleDateFormat("HH:mm:ss");
