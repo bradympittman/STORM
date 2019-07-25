@@ -92,7 +92,6 @@ public class HelicorderGroundTruthDialog extends SwarmFrame implements ListSelec
 
     public void internalFrameClosed(InternalFrameEvent e) {
       // TODO Auto-generated method stub
-      
     }
 
     public void internalFrameIconified(InternalFrameEvent e) {
