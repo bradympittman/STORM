@@ -12,6 +12,7 @@ import gov.usgs.volcanoes.core.legacy.plot.render.HelicorderRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.TextRenderer;
 import gov.usgs.volcanoes.core.time.Ew;
 import gov.usgs.volcanoes.core.time.J2kSec;
+import gov.usgs.volcanoes.core.time.Time;
 import gov.usgs.volcanoes.swarm.Icons;
 import gov.usgs.volcanoes.swarm.Metadata;
 import gov.usgs.volcanoes.swarm.SwarmConfig;
@@ -556,7 +557,14 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     if (working) {
       return;
     }
-    
+    double bottom = J2kSec.fromDate(new Date(System.currentTimeMillis()));
+    double top = J2kSec.fromDate(new Date(System.currentTimeMillis() - settings.span * 60000));
+    if (j2k < top || j2k > bottom) {
+      settings.setBottomTime(J2kSec.fromDate(new Date(J2kSec.asDate(j2k).getTime() + settings.span * 30000)));
+      parent.getHelicorder();
+    }
+
+      
     insetY = my;
 
     if (insetWavePanel == null) {
