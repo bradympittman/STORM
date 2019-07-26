@@ -10,9 +10,7 @@ import gov.usgs.volcanoes.core.legacy.plot.render.AxisRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.FrameRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.HelicorderRenderer;
 import gov.usgs.volcanoes.core.legacy.plot.render.TextRenderer;
-import gov.usgs.volcanoes.core.time.Ew;
 import gov.usgs.volcanoes.core.time.J2kSec;
-import gov.usgs.volcanoes.core.time.Time;
 import gov.usgs.volcanoes.swarm.Icons;
 import gov.usgs.volcanoes.swarm.Metadata;
 import gov.usgs.volcanoes.swarm.SwarmConfig;
@@ -1252,13 +1250,15 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   public void askAddToSpreadsheet(String newStatus)
   {
     int beginIndex = newStatus.indexOf("Frequency");
+    int freqBeginIndex = newStatus.indexOf(":", beginIndex) + 1;
+    
     String frequency = null;
     String power = null;
     String date = null;
     
     if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
     {
-      frequency = newStatus.substring(beginIndex);
+      frequency = newStatus.substring(freqBeginIndex);
       int beginDateIndex = beginIndex - 31;
       date = newStatus.substring(beginDateIndex, beginIndex);
     }
@@ -1266,7 +1266,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     {
       int beginPowerIndex = newStatus.indexOf("Power");
       power = newStatus.substring(beginPowerIndex);
-      frequency = newStatus.substring(beginIndex, beginPowerIndex);
+      frequency = newStatus.substring(freqBeginIndex, beginPowerIndex);
     }
 
     String channel = settings.channel;
