@@ -270,11 +270,12 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
    * Create helicorder view panel user interface.
    */
   public void createUi() {
+    System.out.println("creating UI");
     workbook = new XSSFWorkbook();
     
     if (SwarmInternalFrames.heliOpened == 0)
     {
-      rowNum = 0;
+      rowNum = 1;
 
       sheet = workbook.createSheet("Frequency Data");
       excelFilePath = new File("Frequencies.xlsx");
@@ -285,6 +286,15 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
       FileOutputStream out;
       try {
         sheet = workbookFreq.createSheet("Frequency Data");
+        Row row = sheet.createRow(0);
+        Cell cell = row.createCell(0);
+        cell.setCellValue("Channel");
+        Cell cell2 = row.createCell(1);
+        cell2.setCellValue("Date");
+        Cell cell3 = row.createCell(2);
+        cell3.setCellValue("Frequency");
+        Cell cell4 = row.createCell(3);
+        cell4.setCellValue("Power");
         out = new FileOutputStream(excelFilePath);
         workbookFreq.write(out);
         out.close();
@@ -1325,11 +1335,16 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
       }
     }
     dateString = filename.substring(0, underIndex - 1);
+    System.out.println("date string " + dateString);
     
     int year = Integer.parseInt(dateString.substring(0, 4));
 //    int year = 1989;
     int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
     int day = Integer.parseInt(dateString.substring(6));
+    
+    System.out.println("year " + year);
+    System.out.println("month " + month);
+    System.out.println("day " + day);
   
     Iterator<Row> rowIterator = sheet.iterator();
     int rowCount = 0;
@@ -1442,6 +1457,9 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     int year = 1989;
     int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
     int day = Integer.parseInt(dateString.substring(6));
+    
+    System.out.println("creating GT month " + month);
+    System.out.println("creating GT day " + day);
     
     SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
     star.setTimeZone(TimeZone.getTimeZone("UTC"));
