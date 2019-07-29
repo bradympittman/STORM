@@ -1431,11 +1431,7 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
   
     }
     HelicorderGroundTruthDialog d = new HelicorderGroundTruthDialog(this, dates);
-//    if (firstGroundOpening != true)
-//    {
-//      d.setVisible(true);
-//    }
-//    firstGroundOpening = false;
+
     d.setVisible(true);
     file.close();
     
@@ -1459,9 +1455,6 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
     int year = 1989;
     int month = Integer.parseInt(dateString.substring(4, 6)) - 1;
     int day = Integer.parseInt(dateString.substring(6));
-    
-    System.out.println("creating GT month " + month);
-    System.out.println("creating GT day " + day);
     
     SimpleDateFormat star = new SimpleDateFormat("HH:mm:ss");
     star.setTimeZone(TimeZone.getTimeZone("UTC"));
