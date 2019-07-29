@@ -114,7 +114,7 @@ public class WaveViewSettings {
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMinFreq = 0;
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMaxFreq = 25;
     DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectraPower = true;
-    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectraPowerMemory = true;
+    DEFAULT_WAVE_VIEW_SETTINGS.autoScaleSpectraPowerMemory = false;
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMinPower = 1;
     DEFAULT_WAVE_VIEW_SETTINGS.spectraMaxPower = 5;
     // spectrogram options
