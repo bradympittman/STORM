@@ -1,11 +1,15 @@
 package gov.usgs.volcanoes.swarm.event;
 
+import gov.usgs.volcanoes.core.time.Ew;
 import gov.usgs.volcanoes.core.time.J2kSec;
 import gov.usgs.volcanoes.core.time.Time;
+import gov.usgs.volcanoes.swarm.heli.HelicorderViewPanel;
 
 import java.awt.Color;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -16,6 +20,8 @@ public class TagData implements Comparator<TagData> {
   public double startTime;
   public String classification;
   public Color color;
+  public String startDate;
+  public String startingTime;
 
   /**
    * Default constructor.
@@ -42,6 +48,7 @@ public class TagData implements Comparator<TagData> {
   public TagData(String channel, double startTime, String classification) {
     this.channel = channel;
     this.startTime = startTime;
+
     if (classification.compareTo("Other") == 0)
     {
       String newClassification = JOptionPane.showInputDialog(new JInternalFrame(), 
@@ -76,7 +83,11 @@ public class TagData implements Comparator<TagData> {
   }
   
   public String toString() {
-    return J2kSec.format(Time.STANDARD_TIME_FORMAT, startTime) + "," + channel + ","
+    String starting = J2kSec.format(Time.STANDARD_TIME_FORMAT, startTime);
+    String date = starting.substring(0, 10);
+    String time = starting.substring(10);
+    
+    return date + "," + time + "," + channel + ","
         + classification;
   }
 

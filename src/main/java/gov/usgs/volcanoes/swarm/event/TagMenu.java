@@ -63,7 +63,8 @@ public class TagMenu extends JPopupMenu  {
       "Ice quake",
       "Noise",
       "Cultural",
-      "Unclassified"
+      "Unclassified",
+      "Other"
   };
   
   static {
