@@ -1255,12 +1255,14 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     String frequency = null;
     String power = null;
     String date = null;
+    String time = null;
     
     if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
     {
       frequency = newStatus.substring(freqBeginIndex);
       int beginDateIndex = beginIndex - 25;
-      date = newStatus.substring(beginDateIndex, beginIndex);
+      date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
+      time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 23);
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
@@ -1269,7 +1271,9 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       power = newStatus.substring(beginPowerIndex);
       
       int beginDateIndex = 1;
-      date = newStatus.substring(beginDateIndex, beginIndex);
+      date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
+      time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 23);
+      time += " - " + newStatus.substring(beginDateIndex + 37, beginDateIndex + 60);
       
       frequency = newStatus.substring(freqBeginIndex, newStatus.indexOf("Power"));
     }
@@ -1294,7 +1298,9 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           Cell cell = row.createCell(1);
           cell.setCellValue(date);
           Cell cell2 = row.createCell(2);
-          cell2.setCellValue(frequency);
+          cell2.setCellValue(time);
+          Cell cell3 = row.createCell(3);
+          cell3.setCellValue(frequency);
         }
         else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
         {
@@ -1303,9 +1309,11 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           Cell cell = row.createCell(1);
           cell.setCellValue(date);
           Cell cell2 = row.createCell(2);
-          cell2.setCellValue(power);
+          cell2.setCellValue(time);
           Cell cell3 = row.createCell(3);
-          cell3.setCellValue(frequency);
+          cell3.setCellValue(power);
+          Cell cell4 = row.createCell(4);
+          cell4.setCellValue(frequency);
         }
         
 
