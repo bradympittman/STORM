@@ -1311,6 +1311,7 @@ public class WaveClipboardFrame extends SwarmFrame {
     if (history == null || history.empty()) {
       return;
     }
+    
 
     final double[] t = history.pop();
     fetchNewWave(wvp, t[0], t[1]);
@@ -1322,6 +1323,10 @@ public class WaveClipboardFrame extends SwarmFrame {
   public void back() {
     for (final WaveViewPanel p : selectedSet) {
       back(p);
+      p.getSettings().spectrogramMinFreq = p.getSettings().lastSpectrogramMinFreq;
+      p.getSettings().spectrogramMaxFreq = p.getSettings().lastSpectrogramMaxFreq;
+      p.getSettings().notifyView();
+      p.repaint();
     }
   }
 
