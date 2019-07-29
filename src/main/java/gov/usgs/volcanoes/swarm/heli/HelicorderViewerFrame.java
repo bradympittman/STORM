@@ -292,9 +292,11 @@ public class HelicorderViewerFrame extends SwarmFrame implements Kioskable {
         Cell cell2 = row.createCell(1);
         cell2.setCellValue("Date");
         Cell cell3 = row.createCell(2);
-        cell3.setCellValue("Frequency");
+        cell3.setCellValue("Time");
         Cell cell4 = row.createCell(3);
-        cell4.setCellValue("Power");
+        cell4.setCellValue("Frequency");
+        Cell cell5 = row.createCell(4);
+        cell5.setCellValue("Power");
         out = new FileOutputStream(excelFilePath);
         workbookFreq.write(out);
         out.close();
