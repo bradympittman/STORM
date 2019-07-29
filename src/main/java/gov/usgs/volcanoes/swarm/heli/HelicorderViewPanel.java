@@ -1262,9 +1262,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
       frequency = newStatus.substring(freqBeginIndex);
       int beginDateIndex = beginIndex - 31;
       date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
-      System.out.println("date " + date);
       time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 23);
-      System.out.println("time " + time);
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
@@ -1278,8 +1276,6 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     }
 
     String channel = settings.channel;
-    
-//    System.out.println(HelicorderViewerFrame.excelFilePath);
     
     try {
         FileInputStream inputStream = new FileInputStream(new File(HelicorderViewerFrame.excelFilePath.getName()));
