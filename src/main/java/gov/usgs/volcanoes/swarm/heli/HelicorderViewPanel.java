@@ -1231,10 +1231,10 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     for (String str: array) {
       newStatus += str + "\n";
     }
-    System.out.println("\n\nHERE\n" + newStatus);
 
     int beginIndex = newStatus.indexOf("Frequency");
     String frequency = newStatus.substring(beginIndex);
+    
 
     Row row = HelicorderViewerFrame.sheet.createRow(HelicorderViewerFrame.rowNum);
     row.createCell(0).setCellValue(frequency);
@@ -1259,14 +1259,19 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
     {
       frequency = newStatus.substring(freqBeginIndex);
-      int beginDateIndex = beginIndex - 31;
+      int beginDateIndex = beginIndex - 25;
       date = newStatus.substring(beginDateIndex, beginIndex);
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
       int beginPowerIndex = newStatus.indexOf("Power");
+      beginPowerIndex = newStatus.indexOf(":", beginPowerIndex) + 1;
       power = newStatus.substring(beginPowerIndex);
-      frequency = newStatus.substring(freqBeginIndex, beginPowerIndex);
+      
+      int beginDateIndex = 1;
+      date = newStatus.substring(beginDateIndex, beginIndex);
+      
+      frequency = newStatus.substring(freqBeginIndex, newStatus.indexOf("Power"));
     }
 
     String channel = settings.channel;
@@ -1296,9 +1301,11 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
           Cell cellChannel = row.createCell(0);
           cellChannel.setCellValue(channel);
           Cell cell = row.createCell(1);
-          cell.setCellValue(power);
+          cell.setCellValue(date);
           Cell cell2 = row.createCell(2);
-          cell2.setCellValue(frequency);
+          cell2.setCellValue(power);
+          Cell cell3 = row.createCell(3);
+          cell3.setCellValue(frequency);
         }
         
 
@@ -1316,6 +1323,6 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     
   }
   
-  //end my code
 
+  
 }
