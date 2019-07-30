@@ -1249,8 +1249,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   
   public void askAddToSpreadsheet(String newStatus)
   {
-    int beginIndex = newStatus.indexOf("Frequency");
-    int freqBeginIndex = newStatus.indexOf(":", beginIndex) + 1;
+    
     
     String frequency = null;
     String power = null;
@@ -1259,13 +1258,41 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     
     if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTROGRAM)
     {
-      frequency = newStatus.substring(freqBeginIndex);
-      int beginDateIndex = beginIndex - 31;
-      date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
-      time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 23);
+
+      //47
+      int findBoxIndex = newStatus.indexOf("]");
+      if (newStatus.length() - findBoxIndex > 55)
+      {
+        int beginIndex = newStatus.indexOf("Frequency");
+        int freqBeginIndex = newStatus.indexOf(":", beginIndex) + 1;
+        
+        frequency = newStatus.substring(freqBeginIndex);
+        
+        int beginDateIndex = beginIndex - 31;
+        date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
+        time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 29);
+      }
+      else
+      {
+        int beginIndex = newStatus.indexOf("Frequency");
+        int freqBeginIndex = newStatus.indexOf(":", beginIndex) + 1;
+        
+        frequency = newStatus.substring(freqBeginIndex);
+        
+        int beginDateIndex = beginIndex - 25;
+        date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
+        time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 23);
+      }
+      
+//      int beginDateIndex = beginIndex - 31;
+//      date = newStatus.substring(beginDateIndex, beginDateIndex + 10);
+//      time = newStatus.substring(beginDateIndex + 10, beginDateIndex + 29);
     }
     else if (WaveViewSettings.viewType == WaveViewSettings.ViewType.SPECTRA)
     {
+      int beginIndex = newStatus.indexOf("Frequency");
+      int freqBeginIndex = newStatus.indexOf(":", beginIndex) + 1;
+      
       int beginPowerIndex = newStatus.indexOf("Power");
       beginPowerIndex = newStatus.indexOf(":", beginPowerIndex) + 1;
       power = newStatus.substring(beginPowerIndex);
