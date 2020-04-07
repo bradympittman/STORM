@@ -1200,18 +1200,17 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
   public void showSavedStausBox(String status) {
     SwarmFrame f = new SwarmFrame("Saved Status", true, true, false, true);
     f.setOpaque(true);
+    f.setLocation(0, 0);
     f.getContentPane().setLayout(new FlowLayout());
     for (String str: formatStatus(status)) {
       JTextField text = new JTextField(str + ",\n");
       text.addMouseListener(new SavedStatusMouseListener());
-      f.getContentPane().add(text);
-      
+      f.getContentPane().add(text); 
     }
     
-    
     f.setVisible(true);
+    f.setLocation(0, 0);
     f.setSize(500, 300);
-    f.setOpaque(true);
     f.setBackground(Color.white);
     SwarmInternalFrames.add(f);
 //    
