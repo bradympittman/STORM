@@ -141,6 +141,7 @@ public class HelicorderViewerSettings {
         System.err.println("Could not parse setting: " + opts[i]);
       }
     }
+    
   }
 
   /**

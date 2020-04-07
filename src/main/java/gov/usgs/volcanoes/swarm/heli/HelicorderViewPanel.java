@@ -1209,7 +1209,7 @@ public class HelicorderViewPanel extends JComponent implements SwarmOptionsListe
     }
     
     f.setVisible(true);
-    f.setLocation(0, 0);
+    f.setLocation(swarmConfig.clipboardX, swarmConfig.clipboardY);
     f.setSize(500, 300);
     f.setBackground(Color.white);
     SwarmInternalFrames.add(f);

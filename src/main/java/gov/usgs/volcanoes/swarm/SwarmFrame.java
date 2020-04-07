@@ -79,7 +79,7 @@ public class SwarmFrame extends JInternalFrame {
     fullScreen = b;
     this.setResizable(!fullScreen);
     this.setIconifiable(!fullScreen);
-    this.setMaximizable(!fullScreen);
+    //this.setMaximizable(!fullScreen);
     this.setClosable(!fullScreen);
     this.putClientProperty("JInternalFrame.isPalette", new Boolean(fullScreen));
     BasicInternalFrameUI ui = (BasicInternalFrameUI) this.getUI();
